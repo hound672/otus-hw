@@ -1,4 +1,4 @@
-module github.com/hound672/hw01_hello_otus
+module github.com/hound672/otus-hw/hw01_hello_otus
 
 go 1.21
 
