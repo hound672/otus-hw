@@ -7,58 +7,51 @@ import (
 	"unicode"
 )
 
+const symbolToEscape string = "\\"
+
 var ErrInvalidString = errors.New("invalid string")
 
-type State int
-
-const (
-	waitRune = iota
-	waitRepeatCount
-	waitEscaped
-)
-
-const escaped string = "\\"
-
 func Unpack(source string) (string, error) {
-	runes := []rune(source)
-	currentState := waitRune
+	sourceRunes := []rune(source)
 
-	result := &strings.Builder{}
+	var symbolToRepeat string
+	var result strings.Builder
+	var isNextSymbolEscaped bool
 
-	var repeatString string
-	for _, el := range runes {
-
+	for _, symbolRune := range sourceRunes {
+		currentSymbol := string(symbolRune)
 		switch {
-		case currentState == waitEscaped:
-			if !(unicode.IsDigit(el) || string(el) == escaped) {
+		case isNextSymbolEscaped:
+			if !(unicode.IsDigit(symbolRune) || currentSymbol == symbolToEscape) {
 				return "", ErrInvalidString
 			}
-			repeatString = string(el)
-			currentState = waitRune
-		case string(el) == escaped:
-			currentState = waitEscaped
-		case currentState == waitRune:
-			if unicode.IsDigit(el) {
-				return "", ErrInvalidString
-			}
-			repeatString = string(el)
-			currentState = waitRepeatCount
-		case currentState == waitRepeatCount:
-			if !unicode.IsDigit(el) {
-				result.WriteString(repeatString)
-				repeatString = string(el)
-				break
-			}
+			symbolToRepeat = currentSymbol
+			isNextSymbolEscaped = false
 
-			repeatCount, err := strconv.Atoi(string(el))
+		case currentSymbol == symbolToEscape:
+			result.WriteString(symbolToRepeat)
+			symbolToRepeat = ""
+			isNextSymbolEscaped = true
+
+		case unicode.IsDigit(symbolRune):
+			if symbolToRepeat == "" {
+				return "", ErrInvalidString
+			}
+			repeatCount, err := strconv.Atoi(currentSymbol)
 			if err != nil {
 				return "", err
 			}
-			result.WriteString(strings.Repeat(string(repeatString), repeatCount))
-			currentState = waitRune
+			result.WriteString(strings.Repeat(symbolToRepeat, repeatCount))
+			symbolToRepeat = ""
+
+		default:
+			result.WriteString(symbolToRepeat)
+			symbolToRepeat = currentSymbol
 		}
 	}
-	result.WriteString(repeatString)
-
+	if isNextSymbolEscaped {
+		return "", ErrInvalidString
+	}
+	result.WriteString(symbolToRepeat)
 	return result.String(), nil
 }
