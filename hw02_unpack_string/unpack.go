@@ -12,13 +12,11 @@ const symbolToEscape string = "\\"
 var ErrInvalidString = errors.New("invalid string")
 
 func Unpack(source string) (string, error) {
-	sourceRunes := []rune(source)
-
 	var symbolToRepeat string
 	var result strings.Builder
 	var isNextSymbolEscaped bool
 
-	for _, symbolRune := range sourceRunes {
+	for _, symbolRune := range source {
 		currentSymbol := string(symbolRune)
 		switch {
 		case isNextSymbolEscaped:
