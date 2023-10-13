@@ -15,8 +15,9 @@ type wordsCount struct {
 }
 
 func Top10(s string) []string {
-	cache := make(map[string]int)
 	var words = strings.Fields(s)
+
+	cache := make(map[string]int)
 	for _, s := range words {
 		cache[s]++
 	}
@@ -25,6 +26,7 @@ func Top10(s string) []string {
 	for k, v := range cache {
 		slice = append(slice, wordsCount{k, v})
 	}
+
 	sort.Slice(slice, func(i, j int) bool {
 		if slice[i].Freq == slice[j].Freq {
 			return slice[i].Word < slice[j].Word
