@@ -1,13 +1,46 @@
 package hw03frequencyanalysis
 
-import "strings"
+import (
+	"sort"
+	"strings"
+)
 
-func Top10(_ string) []string {
+const (
+	maxResultLen = 10
+)
 
-	source := "cat and dog, one dog,two cats and one man"
-	res := strings.Fields(source)
-	_ = res
+type wordsCount struct {
+	Word string
+	Freq int
+}
 
-	// Place your code here.
-	return nil
+func Top10(s string) []string {
+	cache := make(map[string]int)
+	var words = strings.Fields(s)
+	for _, s := range words {
+		cache[s]++
+	}
+
+	var slice = make([]wordsCount, 0, len(cache))
+	for k, v := range cache {
+		slice = append(slice, wordsCount{k, v})
+	}
+	sort.Slice(slice, func(i, j int) bool {
+		if slice[i].Freq == slice[j].Freq {
+			return slice[i].Word < slice[j].Word
+		}
+		return slice[i].Freq > slice[j].Freq
+	})
+
+	resultLen := len(slice)
+	if resultLen > maxResultLen {
+		resultLen = maxResultLen
+	}
+
+	var result = make([]string, resultLen)
+	for i := 0; i < resultLen; i++ {
+		result[i] = slice[i].Word
+	}
+
+	return result
 }
