@@ -15,14 +15,14 @@ type wordsCount struct {
 }
 
 func Top10(s string) []string {
-	var words = strings.Fields(s)
+	words := strings.Fields(s)
 
 	cache := make(map[string]int)
 	for _, s := range words {
 		cache[s]++
 	}
 
-	var slice = make([]wordsCount, 0, len(cache))
+	slice := make([]wordsCount, 0, len(cache))
 	for k, v := range cache {
 		slice = append(slice, wordsCount{k, v})
 	}
@@ -39,7 +39,7 @@ func Top10(s string) []string {
 		resultLen = maxResultLen
 	}
 
-	var result = make([]string, resultLen)
+	result := make([]string, resultLen)
 	for i := 0; i < resultLen; i++ {
 		result[i] = slice[i].Word
 	}
