@@ -1,4 +1,4 @@
-module github.com/hound672/hw03_frequency_analysis
+module github.com/hound672/otus-hw/hw03_frequency_analysis
 
 go 1.19
 
