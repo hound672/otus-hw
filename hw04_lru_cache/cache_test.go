@@ -6,10 +6,21 @@ import (
 	"sync"
 	"testing"
 
+	"github.com/brianvoe/gofakeit/v6"
 	"github.com/stretchr/testify/require"
 )
 
 func TestCache(t *testing.T) {
+	t.Run("new cache item", func(t *testing.T) {
+		key := Key(gofakeit.Word())
+		value := gofakeit.Word()
+
+		result := newCacheItem(key, value)
+
+		require.Equal(t, key, result.key)
+		require.Equal(t, value, result.value)
+	})
+
 	t.Run("empty cache", func(t *testing.T) {
 		c := NewCache(10)
 
@@ -49,14 +60,66 @@ func TestCache(t *testing.T) {
 		require.Nil(t, val)
 	})
 
+	t.Run("capacity limit", func(t *testing.T) {
+		c := NewCache(3)
+
+		c.Set("key1", 1)
+		c.Set("key2", 2)
+		c.Set("key3", 3)
+		c.Set("key4", 4)
+
+		res, wasInCache := c.Get("key1")
+		require.Nil(t, res)
+		require.False(t, wasInCache)
+
+		res, wasInCache = c.Get("key4")
+		require.Equal(t, 4, res)
+		require.True(t, wasInCache)
+	})
+
+	t.Run("update queue by getting from cache", func(t *testing.T) {
+		c := NewCache(3)
+
+		c.Set("key1", 1)
+		c.Set("key2", 2)
+		c.Set("key3", 3)
+
+		c.Get("key1")
+		c.Get("key2")
+		c.Get("key2")
+		c.Get("key2")
+		c.Get("key1")
+		c.Get("key1")
+
+		c.Set("key4", 4)
+
+		result, wasInCache := c.Get("key3")
+
+		require.Nil(t, result)
+		require.False(t, wasInCache)
+	})
+
 	t.Run("purge logic", func(t *testing.T) {
-		// Write me
+		c := NewCache(3)
+
+		c.Set("key1", 1)
+		c.Set("key2", 2)
+		c.Set("key3", 3)
+
+		c.Clear()
+
+		_, wasInCache := c.Get("key1")
+		require.False(t, wasInCache)
+
+		_, wasInCache = c.Get("key2")
+		require.False(t, wasInCache)
+
+		_, wasInCache = c.Get("key3")
+		require.False(t, wasInCache)
 	})
 }
 
 func TestCacheMultithreading(t *testing.T) {
-	t.Skip() // Remove me if task with asterisk completed.
-
 	c := NewCache(10)
 	wg := &sync.WaitGroup{}
 	wg.Add(2)
