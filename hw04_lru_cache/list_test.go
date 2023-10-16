@@ -3,6 +3,8 @@ package hw04lrucache
 import (
 	"testing"
 
+	"github.com/brianvoe/gofakeit/v6"
+
 	"github.com/stretchr/testify/require"
 )
 
@@ -13,6 +15,18 @@ func TestList(t *testing.T) {
 		require.Equal(t, 0, l.Len())
 		require.Nil(t, l.Front())
 		require.Nil(t, l.Back())
+	})
+
+	t.Run("new list item", func(t *testing.T) {
+		value := gofakeit.Word()
+		prev := ListItem{}
+		next := ListItem{}
+
+		result := NewListItem(value, &prev, &next)
+
+		require.Equal(t, value, result.Value)
+		require.Equal(t, &prev, result.Prev)
+		require.Equal(t, &next, result.Next)
 	})
 
 	t.Run("complex", func(t *testing.T) {

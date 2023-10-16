@@ -16,16 +16,26 @@ type ListItem struct {
 	Prev  *ListItem
 }
 
-type list struct {
-	List // Remove me after realization.
+// NewListItem constructor for ListItem entity
+func NewListItem(value interface{}, prev *ListItem, next *ListItem) ListItem {
+	return ListItem{
+		Value: value,
+		Prev:  prev,
+		Next:  next,
+	}
+}
 
-	len int
-	// Place your code here.
+type list struct {
+	len  int
+	head *ListItem
+	tail *ListItem
 }
 
 func NewList() List {
 	return &list{
-		len: 0,
+		len:  0,
+		head: nil,
+		tail: nil,
 	}
 }
 
@@ -39,4 +49,18 @@ func (l *list) Front() *ListItem {
 
 func (l *list) Back() *ListItem {
 	return nil
+}
+
+func (l *list) PushFront(v interface{}) *ListItem {
+	return nil
+}
+
+func (l *list) PushBack(v interface{}) *ListItem {
+	return nil
+}
+
+func (l *list) Remove(i *ListItem) {
+}
+
+func (l *list) MoveToFront(i *ListItem) {
 }
