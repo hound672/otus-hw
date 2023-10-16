@@ -23,10 +23,19 @@ func NewCache(capacity int) Cache {
 }
 
 func (c *lruCache) Set(key Key, value interface{}) bool {
-	return false
+	_, wasInCache := c.items[key]
+
+	elem := c.queue.PushFront(value)
+	c.items[key] = elem
+
+	return wasInCache
 }
 
 func (c *lruCache) Get(key Key) (interface{}, bool) {
+	if el, ok := c.items[key]; ok {
+		return el.Value, true
+	}
+
 	return nil, false
 }
 
