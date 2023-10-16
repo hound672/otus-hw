@@ -64,10 +64,8 @@ func TestList(t *testing.T) {
 		l.Remove(elemToRemove)          // [20 30]
 
 		require.Equal(t, 2, l.Len())
-
 		require.Equal(t, 20, l.Front().Value)
 		require.Nil(t, l.Front().Prev)
-
 		require.Equal(t, 30, l.Back().Value)
 	})
 
@@ -80,7 +78,6 @@ func TestList(t *testing.T) {
 		l.Remove(elemToRemove)          // [10 20]
 
 		require.Equal(t, 2, l.Len())
-
 		require.Equal(t, 10, l.Front().Value)
 
 		require.Equal(t, 20, l.Back().Value)
@@ -120,9 +117,12 @@ func TestList(t *testing.T) {
 			elems = append(elems, i.Value.(int))
 		}
 		require.Equal(t, []int{30, 10, 20}, elems)
-
 		require.Nil(t, l.Back().Next)
 		require.Nil(t, l.Front().Prev)
+
+		// check that elem was moved and now its Next And Prev elements referenced to correct elems
+		require.Nil(t, elemToMove.Prev)
+		require.Equal(t, elemToMove.Next.Value, 10)
 	})
 
 	t.Run("complex", func(t *testing.T) {

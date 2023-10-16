@@ -77,6 +77,28 @@ func TestCache(t *testing.T) {
 		require.True(t, wasInCache)
 	})
 
+	t.Run("update queue by getting from cache", func(t *testing.T) {
+		c := NewCache(3)
+
+		c.Set("key1", 1)
+		c.Set("key2", 2)
+		c.Set("key3", 3)
+
+		c.Get("key1")
+		c.Get("key2")
+		c.Get("key2")
+		c.Get("key2")
+		c.Get("key1")
+		c.Get("key1")
+
+		c.Set("key4", 4)
+
+		result, wasInCache := c.Get("key3")
+
+		require.Nil(t, result)
+		require.False(t, wasInCache)
+	})
+
 	t.Run("purge logic", func(t *testing.T) {
 		// Write me
 	})

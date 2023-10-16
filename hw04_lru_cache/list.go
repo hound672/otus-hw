@@ -111,6 +111,9 @@ func (l *list) MoveToFront(i *ListItem) {
 		return
 	}
 
-	_ = l.PushFront(i.Value)
+	newElem := l.PushFront(i.Value)
 	l.Remove(i)
+
+	i.Next = newElem.Next
+	i.Prev = nil
 }
