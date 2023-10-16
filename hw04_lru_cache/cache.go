@@ -14,13 +14,13 @@ type lruCache struct {
 	items    map[Key]*ListItem
 }
 
-type cacheItem struct {
+type cacheItemType struct {
 	key   Key
 	value interface{}
 }
 
-func newCacheItem(key Key, value interface{}) cacheItem {
-	return cacheItem{
+func newCacheItem(key Key, value interface{}) cacheItemType {
+	return cacheItemType{
 		key:   key,
 		value: value,
 	}
@@ -35,20 +35,49 @@ func NewCache(capacity int) Cache {
 }
 
 func (c *lruCache) Set(key Key, value interface{}) bool {
-	_, wasInCache := c.items[key]
+	cacheItem := newCacheItem(key, value)
 
-	elem := c.queue.PushFront(value)
+	if item, ok := c.items[key]; ok {
+		item.Value = cacheItem
+		c.queue.MoveToFront(item)
+		return true
+	}
+
+	elem := c.queue.PushFront(cacheItem)
 	c.items[key] = elem
 
-	return wasInCache
+	if c.queue.Len() > c.capacity {
+		// stack overflow :)
+		elemToRemove := c.queue.Back()
+
+		cacheItem, ok := elemToRemove.Value.(cacheItemType)
+		if !ok {
+			// it's dev's issue, so we can use panic here
+			panic("Get: item is not cacheItemType")
+		}
+
+		delete(c.items, cacheItem.key)
+		c.queue.Remove(elemToRemove)
+	}
+
+	return false
 }
 
 func (c *lruCache) Get(key Key) (interface{}, bool) {
-	if el, ok := c.items[key]; ok {
-		return el.Value, true
+	item, ok := c.items[key]
+	if !ok {
+		return nil, false
 	}
 
-	return nil, false
+	c.queue.MoveToFront(item)
+
+	cacheItem, ok := item.Value.(cacheItemType)
+	if !ok {
+		// it's dev's issue, so we can use panic here
+		panic("Get: item is not cacheItemType")
+	}
+
+	return cacheItem.value, true
 }
 
 func (c *lruCache) Clear() {
