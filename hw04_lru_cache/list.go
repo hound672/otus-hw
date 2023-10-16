@@ -16,7 +16,7 @@ type ListItem struct {
 	Prev  *ListItem
 }
 
-// NewListItem constructor for ListItem entity
+// NewListItem constructor for ListItem entity.
 func NewListItem(value interface{}, prev *ListItem, next *ListItem) ListItem {
 	return ListItem{
 		Value: value,
@@ -44,19 +44,39 @@ func (l *list) Len() int {
 }
 
 func (l *list) Front() *ListItem {
-	return nil
+	return l.head
 }
 
 func (l *list) Back() *ListItem {
-	return nil
+	return l.tail
 }
 
 func (l *list) PushFront(v interface{}) *ListItem {
-	return nil
+	l.len++
+	newItem := NewListItem(v, nil, l.head)
+
+	if l.head == nil {
+		l.tail = &newItem
+	} else {
+		l.head.Prev = &newItem
+	}
+
+	l.head = &newItem
+	return &newItem
 }
 
 func (l *list) PushBack(v interface{}) *ListItem {
-	return nil
+	l.len++
+	newItem := NewListItem(v, l.tail, nil)
+
+	if l.tail == nil {
+		l.head = &newItem
+	} else {
+		l.tail.Next = &newItem
+	}
+
+	l.tail = &newItem
+	return &newItem
 }
 
 func (l *list) Remove(i *ListItem) {

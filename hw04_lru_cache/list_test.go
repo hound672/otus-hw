@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v6"
-
 	"github.com/stretchr/testify/require"
 )
 
@@ -27,6 +26,22 @@ func TestList(t *testing.T) {
 		require.Equal(t, value, result.Value)
 		require.Equal(t, &prev, result.Prev)
 		require.Equal(t, &next, result.Next)
+	})
+
+	t.Run("simple", func(t *testing.T) {
+		l := NewList()
+
+		l.PushFront(10) // [10]
+		l.PushFront(20) // [20, 10]
+		l.PushBack(30)  // [20, 10, 30]
+
+		require.Equal(t, 3, l.Len())
+
+		elems := make([]int, 0, l.Len())
+		for i := l.Front(); i != nil; i = i.Next {
+			elems = append(elems, i.Value.(int))
+		}
+		require.Equal(t, []int{20, 10, 30}, elems)
 	})
 
 	t.Run("complex", func(t *testing.T) {
