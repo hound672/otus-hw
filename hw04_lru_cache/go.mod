@@ -1,6 +1,6 @@
 module github.com/hound672/otus-hw/hw04_lru_cache
 
-go 1.19
+go 1.21
 
 require github.com/stretchr/testify v1.7.0
 
