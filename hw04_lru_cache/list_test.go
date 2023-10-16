@@ -44,6 +44,66 @@ func TestList(t *testing.T) {
 		require.Equal(t, []int{20, 10, 30}, elems)
 	})
 
+	t.Run("remove only single elem", func(t *testing.T) {
+		l := NewList()
+
+		elemToRemove := l.PushBack(10)
+		l.Remove(elemToRemove)
+
+		require.Equal(t, 0, l.Len())
+		require.Nil(t, l.Front())
+		require.Nil(t, l.Back())
+	})
+
+	t.Run("remove head elem", func(t *testing.T) {
+		l := NewList()
+
+		_ = l.PushFront(30)             // [20]
+		_ = l.PushFront(20)             // [20 30]
+		elemToRemove := l.PushFront(10) // [10 20 30]
+		l.Remove(elemToRemove)          // [20 30]
+
+		require.Equal(t, 2, l.Len())
+
+		require.Equal(t, 20, l.Front().Value)
+		require.Nil(t, l.Front().Prev)
+
+		require.Equal(t, 30, l.Back().Value)
+	})
+
+	t.Run("remove tail elem", func(t *testing.T) {
+		l := NewList()
+
+		elemToRemove := l.PushFront(30) // [20]
+		_ = l.PushFront(20)             // [20 30]
+		_ = l.PushFront(10)             // [10 20 30]
+		l.Remove(elemToRemove)          // [10 20]
+
+		require.Equal(t, 2, l.Len())
+
+		require.Equal(t, 10, l.Front().Value)
+
+		require.Equal(t, 20, l.Back().Value)
+		require.Nil(t, l.Back().Next)
+	})
+
+	t.Run("remove middle elem", func(t *testing.T) {
+		l := NewList()
+
+		_ = l.PushFront(30)             // [20]
+		elemToRemove := l.PushFront(20) // [20 30]
+		_ = l.PushFront(10)             // [10 20 30]
+		l.Remove(elemToRemove)          // [10 30]
+
+		require.Equal(t, 2, l.Len())
+
+		elems := make([]int, 0, l.Len())
+		for i := l.Front(); i != nil; i = i.Next {
+			elems = append(elems, i.Value.(int))
+		}
+		require.Equal(t, []int{10, 30}, elems)
+	})
+
 	t.Run("complex", func(t *testing.T) {
 		l := NewList()
 

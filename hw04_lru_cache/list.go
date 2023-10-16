@@ -80,7 +80,37 @@ func (l *list) PushBack(v interface{}) *ListItem {
 }
 
 func (l *list) Remove(i *ListItem) {
+	if i == nil {
+		return
+	}
+
+	l.len--
+
+	switch {
+	case i.Prev == nil && i.Next == nil:
+		// there is no another elems
+		l.head = nil
+		l.tail = nil
+	case i.Prev == nil && i.Next != nil:
+		// remove from head
+		l.head = i.Next
+		l.head.Prev = nil
+	case i.Prev != nil && i.Next == nil:
+		// remove from tail
+		l.tail = i.Prev
+		l.tail.Next = nil
+	default:
+		// remove from middle
+		i.Prev.Next = i.Next
+		i.Next.Prev = i.Prev
+	}
 }
 
 func (l *list) MoveToFront(i *ListItem) {
+	if i == nil {
+		return
+	}
+
+	_ = l.PushFront(i.Value)
+	l.Remove(i)
 }
