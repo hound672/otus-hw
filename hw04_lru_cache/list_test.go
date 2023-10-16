@@ -8,14 +8,6 @@ import (
 )
 
 func TestList(t *testing.T) {
-	t.Run("empty list", func(t *testing.T) {
-		l := NewList()
-
-		require.Equal(t, 0, l.Len())
-		require.Nil(t, l.Front())
-		require.Nil(t, l.Back())
-	})
-
 	t.Run("new list item", func(t *testing.T) {
 		value := gofakeit.Word()
 		prev := ListItem{}
@@ -26,6 +18,14 @@ func TestList(t *testing.T) {
 		require.Equal(t, value, result.Value)
 		require.Equal(t, &prev, result.Prev)
 		require.Equal(t, &next, result.Next)
+	})
+
+	t.Run("empty list", func(t *testing.T) {
+		l := NewList()
+
+		require.Equal(t, 0, l.Len())
+		require.Nil(t, l.Front())
+		require.Nil(t, l.Back())
 	})
 
 	t.Run("simple", func(t *testing.T) {
