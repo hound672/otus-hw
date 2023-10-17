@@ -13,7 +13,7 @@ func TestList(t *testing.T) {
 		prev := ListItem{}
 		next := ListItem{}
 
-		result := NewListItem(value, &prev, &next)
+		result := newListItem(value, &prev, &next)
 
 		require.Equal(t, value, result.Value)
 		require.Equal(t, &prev, result.Prev)
