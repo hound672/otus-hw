@@ -51,10 +51,7 @@ func (c *lruCache) Set(key Key, value interface{}) bool {
 		return true
 	}
 
-	elem := c.queue.PushFront(cacheItem)
-	c.items[key] = elem
-
-	if c.queue.Len() > c.capacity {
+	if c.queue.Len() >= c.capacity {
 		// stack overflow :)
 		elemToRemove := c.queue.Back()
 
@@ -67,6 +64,9 @@ func (c *lruCache) Set(key Key, value interface{}) bool {
 		delete(c.items, cacheItem.key)
 		c.queue.Remove(elemToRemove)
 	}
+
+	elem := c.queue.PushFront(cacheItem)
+	c.items[key] = elem
 
 	return false
 }
