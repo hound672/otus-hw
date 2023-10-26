@@ -28,9 +28,11 @@ func Run(tasks []Task, n, m int) error {
 		workerTasks <- task
 	}
 
+	hasError := false
 	for _ = range errorTasks {
 		errorsCount++
 		if errorsCount >= m {
+			hasError = true
 			break
 		}
 	}
@@ -39,6 +41,10 @@ func Run(tasks []Task, n, m int) error {
 	close(workerTasks)
 	wg.Wait()
 	close(errorTasks) // close this channel only after working (to prevent writing close channel panic)
+
+	if hasError {
+		return ErrErrorsLimitExceeded
+	}
 
 	return nil
 }
