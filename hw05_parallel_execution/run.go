@@ -15,8 +15,7 @@ func Run(tasks []Task, n, m int) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	var wg sync.WaitGroup
 	workerTasks := make(chan Task, len(tasks))
-	errorTasks := make(chan error, len(tasks))
-	//var errorsCount int
+	errorTasks := make(chan struct{}, len(tasks))
 
 	// spawn workers
 	wg.Add(n)
@@ -31,6 +30,7 @@ func Run(tasks []Task, n, m int) error {
 	close(workerTasks)
 
 	//hasError := false
+	//var errorsCount int
 
 	// handle errors
 	//wg.Add(1)
@@ -61,7 +61,7 @@ func Run(tasks []Task, n, m int) error {
 	return nil
 }
 
-func worker(ctx context.Context, wg *sync.WaitGroup, workerTasks <-chan Task, errorsTasks chan<- error) {
+func worker(ctx context.Context, wg *sync.WaitGroup, workerTasks <-chan Task, errorsTasks chan<- struct{}) {
 	defer wg.Done()
 
 	for task := range workerTasks {
@@ -71,7 +71,7 @@ func worker(ctx context.Context, wg *sync.WaitGroup, workerTasks <-chan Task, er
 
 		err := task()
 		if err != nil {
-			errorsTasks <- err
+			errorsTasks <- struct{}{}
 		}
 	}
 
