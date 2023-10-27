@@ -16,7 +16,7 @@ func Run(tasks []Task, n, m int) error {
 	var wg sync.WaitGroup
 	workerTasks := make(chan Task, len(tasks))
 	errorTasks := make(chan error, len(tasks))
-	var errorsCount int
+	//var errorsCount int
 
 	// spawn workers
 	wg.Add(n)
@@ -27,35 +27,36 @@ func Run(tasks []Task, n, m int) error {
 	for _, task := range tasks {
 		workerTasks <- task
 	}
+	// close channel immediately since won't send tasks to it anymore
+	close(workerTasks)
 
-	hasError := false
+	//hasError := false
 
 	// handle errors
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
+	//wg.Add(1)
+	//go func() {
+	//	defer wg.Done()
+	//
+	//	select {
+	//	case <-ctx.Done():
+	//		return
+	//	case _ = <-errorTasks:
+	//		errorsCount++
+	//		if errorsCount >= m {
+	//			hasError = true
+	//			cancel()
+	//			return
+	//		}
+	//	}
+	//}()
 
-		select {
-		case <-ctx.Done():
-			return
-		case _ = <-errorTasks:
-			errorsCount++
-			if errorsCount >= m {
-				hasError = true
-				cancel()
-				return
-			}
-		}
-	}()
-
-	close(workerTasks)
 	wg.Wait()
 	cancel()
 	close(errorTasks) // close this channel only after working (to prevent writing close channel panic)
 
-	if hasError {
-		return ErrErrorsLimitExceeded
-	}
+	//if hasError {
+	//	return ErrErrorsLimitExceeded
+	//}
 
 	return nil
 }
