@@ -29,17 +29,28 @@ func Run(tasks []Task, n, m int) error {
 	}
 
 	hasError := false
-	for _ = range errorTasks {
-		errorsCount++
-		if errorsCount >= m {
-			hasError = true
-			break
+
+	// handle errors
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+
+		select {
+		case <-ctx.Done():
+			return
+		case _ = <-errorTasks:
+			errorsCount++
+			if errorsCount >= m {
+				hasError = true
+				cancel()
+				return
+			}
 		}
-	}
-	cancel()
+	}()
 
 	close(workerTasks)
 	wg.Wait()
+	cancel()
 	close(errorTasks) // close this channel only after working (to prevent writing close channel panic)
 
 	if hasError {
