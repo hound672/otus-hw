@@ -94,6 +94,56 @@ func TestRun(t *testing.T) {
 	})
 }
 
+func TestNilTasks(t *testing.T) {
+	defer goleak.VerifyNone(t)
+
+	t.Run("single task nil", func(t *testing.T) {
+		taskCount := 1
+		tasks := make([]Task, 0, taskCount)
+
+		for i := 0; i < taskCount; i++ {
+			tasks = append(tasks, nil)
+		}
+
+		workersCount := 10
+		maxErrorsCount := taskCount
+		result := Run(tasks, workersCount, maxErrorsCount)
+
+		require.Equal(t, ErrNilTask, result)
+	})
+
+	t.Run("some tasks is nil", func(t *testing.T) {
+		tasksCount := 50
+		tasks := make([]Task, 0, tasksCount)
+
+		var runTasksCount int32
+		var sumTime time.Duration
+
+		for i := 0; i < tasksCount; i++ {
+			taskSleep := time.Millisecond * time.Duration(rand.Intn(100))
+			sumTime += taskSleep
+
+			if i%2 == 0 {
+				tasks = append(tasks, nil)
+				continue
+			}
+
+			tasks = append(tasks, func() error {
+				time.Sleep(taskSleep)
+				atomic.AddInt32(&runTasksCount, 1)
+				return nil
+			})
+		}
+
+		workersCount := 5
+		maxErrorsCount := 1
+
+		result := Run(tasks, workersCount, maxErrorsCount)
+
+		require.Equal(t, ErrNilTask, result)
+	})
+}
+
 func TestWithEventually(t *testing.T) {
 	defer goleak.VerifyNone(t)
 

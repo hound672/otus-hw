@@ -6,7 +6,10 @@ import (
 	"sync/atomic"
 )
 
-var ErrErrorsLimitExceeded = errors.New("errors limit exceeded")
+var (
+	ErrErrorsLimitExceeded = errors.New("errors limit exceeded")
+	ErrNilTask             = errors.New("task is nil")
+)
 
 type Task func() error
 
@@ -28,17 +31,25 @@ func Run(tasks []Task, n int, m int) error {
 			}
 		}()
 	}
-	for _, task := range tasks {
-		if atomic.LoadInt32(&errorsCount) >= int32(m) {
-			break
+
+	err := func() error {
+		for _, task := range tasks {
+			task := task
+			if task == nil {
+				return ErrNilTask
+			}
+
+			if atomic.LoadInt32(&errorsCount) >= int32(m) {
+				return ErrErrorsLimitExceeded
+			}
+			workerTasks <- task
 		}
-		workerTasks <- task
-	}
+
+		return nil
+	}()
 
 	close(workerTasks)
 	wg.Wait()
-	if errorsCount >= int32(m) {
-		return ErrErrorsLimitExceeded
-	}
-	return nil
+
+	return err
 }
