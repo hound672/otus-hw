@@ -118,7 +118,7 @@ func TestPipelineNewTests(t *testing.T) {
 		in := make(Bi)
 		done := make(Bi)
 
-		for _ = range ExecutePipeline(in, done) {
+		for range ExecutePipeline(in, done) {
 
 		}
 	})
