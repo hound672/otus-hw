@@ -93,7 +93,7 @@ func TestPipeline(t *testing.T) {
 }
 
 func TestPipelineNewTests(t *testing.T) {
-	g := func(name string, f func(v interface{}) interface{}) Stage {
+	g := func(_ string, f func(v interface{}) interface{}) Stage {
 		return func(in In) Out {
 			out := make(Bi)
 			go func() {
@@ -119,7 +119,6 @@ func TestPipelineNewTests(t *testing.T) {
 		done := make(Bi)
 
 		for range ExecutePipeline(in, done) {
-
 		}
 	})
 
@@ -144,6 +143,5 @@ func TestPipelineNewTests(t *testing.T) {
 		require.Equal(t, []string{}, result)
 		require.Less(t, int64(elapsed),
 			int64(sleepPerStage)*int64(len(stages)+len(data)-1)+int64(fault))
-
 	})
 }
