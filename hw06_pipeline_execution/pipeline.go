@@ -16,6 +16,7 @@ func insertDone(in In, done Bi) Out {
 		for {
 			select {
 			case <-done:
+				out = nil
 				return
 			case vv, ok := <-in:
 				if !ok {
