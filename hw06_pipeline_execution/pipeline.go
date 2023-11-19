@@ -23,6 +23,7 @@ func insertDone(in In, done Bi) Out {
 				}
 				select {
 				case <-done:
+					out = nil
 					return
 				case out <- vv:
 				}
