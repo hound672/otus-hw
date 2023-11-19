@@ -100,7 +100,11 @@ func TestPipelineNewTests(t *testing.T) {
 				defer close(out)
 				for v := range in {
 					time.Sleep(sleepPerStage)
-					out <- f(v)
+					select {
+					case out <- f(v):
+					default:
+						return
+					}
 				}
 			}()
 			return out
