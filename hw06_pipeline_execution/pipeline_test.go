@@ -93,6 +93,7 @@ func TestPipeline(t *testing.T) {
 }
 
 func TestPipelineNewTests(t *testing.T) {
+	// Stage generator
 	g := func(_ string, f func(v interface{}) interface{}) Stage {
 		return func(in In) Out {
 			out := make(Bi)
@@ -100,11 +101,7 @@ func TestPipelineNewTests(t *testing.T) {
 				defer close(out)
 				for v := range in {
 					time.Sleep(sleepPerStage)
-					select {
-					case out <- f(v):
-					default:
-						return
-					}
+					out <- f(v)
 				}
 			}()
 			return out
