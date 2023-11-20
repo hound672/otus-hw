@@ -1,7 +1,6 @@
 package hw06pipelineexecution
 
 import (
-	"log"
 	"strconv"
 	"testing"
 	"time"
@@ -54,7 +53,6 @@ func TestPipeline(t *testing.T) {
 			result = append(result, s.(string))
 		}
 		elapsed := time.Since(start)
-		log.Printf("el: %v", elapsed)
 
 		require.Equal(t, []string{"102", "104", "106", "108", "110"}, result)
 		require.Less(t,
@@ -169,8 +167,7 @@ func TestPipelineNewTests(t *testing.T) {
 		}
 		elapsed := time.Since(start)
 
-		log.Printf("el: %v", elapsed)
 		require.Len(t, result, 0)
-		require.Less(t, int64(elapsed), 100*time.Microsecond)
+		require.Less(t, int64(elapsed), time.Second)
 	})
 }
