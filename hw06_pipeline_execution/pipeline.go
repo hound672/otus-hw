@@ -33,10 +33,11 @@ func insertDone(in In, done Bi) Out {
 }
 
 func ExecutePipeline(in In, done Bi, stages ...Stage) Out {
+	outResult := make(chan interface{}, len(stages))
+	defer close(outResult)
+
 	if len(stages) == 0 {
-		out := make(chan interface{})
-		close(out)
-		return out
+		return outResult
 	}
 
 	out := stages[0](insertDone(in, done))
@@ -46,5 +47,22 @@ func ExecutePipeline(in In, done Bi, stages ...Stage) Out {
 
 		out = stage(insertDone(out, done))
 	}
-	return out
+
+	// read stages result
+	func() {
+		for {
+			select {
+			case vv, ok := <-out:
+				if !ok {
+					return
+				}
+				outResult <- vv
+			case <-done:
+				return
+			default:
+			}
+		}
+	}()
+
+	return outResult
 }
