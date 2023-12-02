@@ -14,6 +14,7 @@ func RunCmd(cmd []string, env Environment) (returnCode int) {
 		for k, v := range env {
 			v = string(bytes.ReplaceAll([]byte(v), []byte("\x00"), []byte("\n")))
 			v = strings.TrimRight(v, "\t")
+			v = strings.TrimRight(v, " ")
 			os.Setenv(k, v)
 			if v == "" {
 				os.Unsetenv(k)
