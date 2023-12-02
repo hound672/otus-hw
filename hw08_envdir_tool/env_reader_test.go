@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"reflect"
 	"testing"
 
 	"github.com/dchest/safefile"
@@ -34,19 +33,18 @@ func TestWithDir(t *testing.T) {
 			log.Fatal(err)
 		}
 
-		var actual Environment
-		actual, err = ReadDir("/tmp/testdir")
+		var result Environment
+		result, err = ReadDir("/tmp/testdir")
 		if err != nil {
 			fmt.Println(err)
 		}
-		for k, v := range actual {
-			actual[k] = v
+		for k, v := range result {
+			result[k] = v
 		}
-		expected := map[string]string{
+		expected := Environment{
 			"S.txt": "temporary",
 		}
-		result := reflect.DeepEqual(expected, actual)
-		require.True(t, result)
+		require.Equal(t, expected, result)
 	})
 }
 
@@ -72,18 +70,17 @@ func TestWithFiles(t *testing.T) {
 			log.Fatal(err)
 		}
 
-		var actual Environment
-		actual, err = ReadDir("/tmp/testdir")
+		var result Environment
+		result, err = ReadDir("/tmp/testdir")
 		if err != nil {
 			fmt.Println(err)
 		}
-		for k, v := range actual {
-			actual[k] = v
+		for k, v := range result {
+			result[k] = v
 		}
-		expected := map[string]string{}
+		expected := Environment{}
 
-		result := reflect.DeepEqual(expected, actual)
-		require.True(t, result)
+		require.Equal(t, expected, result)
 	})
 
 	t.Run("reading multiline file", func(t *testing.T) {
@@ -108,18 +105,17 @@ func TestWithFiles(t *testing.T) {
 			log.Fatal(err)
 		}
 
-		var actual Environment
-		actual, err = ReadDir("/tmp/testdir")
+		var result Environment
+		result, err = ReadDir("/tmp/testdir")
 		if err != nil {
 			fmt.Println(err)
 		}
-		for k, v := range actual {
-			actual[k] = v
+		for k, v := range result {
+			result[k] = v
 		}
-		expected := map[string]string{
+		expected := Environment{
 			"file.txt": "the first line",
 		}
-		result := reflect.DeepEqual(expected, actual)
-		require.True(t, result)
+		require.Equal(t, expected, result)
 	})
 }
