@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"strings"
 
@@ -18,7 +17,7 @@ func ReadDir(dir string) (Environment, error) {
 	// Place your code here
 	list := make(map[string]string)
 
-	files, err := ioutil.ReadDir(dir)
+	files, err := os.ReadDir(dir)
 	if err != nil {
 		fmt.Println(err)
 		return nil, errors.Wrap(err, "readDir failed")
@@ -27,7 +26,7 @@ func ReadDir(dir string) (Environment, error) {
 	for _, f := range files {
 		name := f.Name()
 		if !strings.Contains(name, "=") {
-			file, err := os.OpenFile(dir+"/"+name, os.O_RDONLY, 0755)
+			file, err := os.OpenFile(dir+"/"+name, os.O_RDONLY, 0o755)
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -41,5 +40,6 @@ func ReadDir(dir string) (Environment, error) {
 			}
 		}
 	}
+
 	return list, nil
 }

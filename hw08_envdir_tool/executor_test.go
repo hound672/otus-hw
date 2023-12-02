@@ -9,8 +9,7 @@ import (
 
 func TestRunCmd(t *testing.T) {
 	t.Run("Success", func(t *testing.T) {
-		var env Environment
-		env = map[string]string{
+		env := map[string]string{
 			"STR1": "foo",
 			"STR2": "bar",
 		}
@@ -22,8 +21,7 @@ func TestRunCmd(t *testing.T) {
 	})
 
 	t.Run("Invalid command error", func(t *testing.T) {
-		var env Environment
-		env = map[string]string{}
+		env := map[string]string{}
 		cmd := []string{"bash", "-c", "ls /xxx"}
 		code := RunCmd(cmd, env)
 
