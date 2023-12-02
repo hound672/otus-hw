@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path"
 	"testing"
 
 	"github.com/dchest/safefile"
@@ -12,29 +13,30 @@ import (
 
 func TestWithDir(t *testing.T) {
 	t.Run("reading file from dir", func(t *testing.T) {
-		err := os.Mkdir("/tmp/testdir", 0o755)
-		defer func() { _ = os.RemoveAll("/tmp/testdir") }()
+		tmpDir, err := os.MkdirTemp("", "*")
 		if err != nil {
-			fmt.Println(err)
+			panic(err)
 		}
 
-		tmpfile, err := safefile.Create("/tmp/testdir/S.txt", 0o755)
+		defer func() { _ = os.RemoveAll(tmpDir) }()
+
+		tmpFile, err := safefile.Create(path.Join(tmpDir, "S.txt"), 0o755)
 		if err != nil {
 			fmt.Println(err)
 		}
-		defer tmpfile.Close()
+		defer func() { _ = tmpFile.Close() }()
 
 		content := []byte("temporary")
-		if _, err := tmpfile.Write(content); err != nil {
+		if _, err := tmpFile.Write(content); err != nil {
 			log.Fatal(err)
 		}
 
-		if err := tmpfile.Commit(); err != nil {
+		if err := tmpFile.Commit(); err != nil {
 			log.Fatal(err)
 		}
 
 		var result Environment
-		result, err = ReadDir("/tmp/testdir")
+		result, err = ReadDir(tmpDir)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -50,28 +52,30 @@ func TestWithDir(t *testing.T) {
 
 func TestWithFiles(t *testing.T) {
 	t.Run("reading invalid file", func(t *testing.T) {
-		err := os.Mkdir("/tmp/testdir", 0o755)
-		defer func() { _ = os.RemoveAll("/tmp/testdir") }()
+		tmpDir, err := os.MkdirTemp("", "*")
+		if err != nil {
+			panic(err)
+		}
+
+		defer func() { _ = os.RemoveAll(tmpDir) }()
+
+		tmpFile, err := safefile.Create(path.Join(tmpDir, "S=q.txt"), 0o755)
 		if err != nil {
 			fmt.Println(err)
 		}
-		tmpfile, err := safefile.Create("/tmp/testdir/S=q.txt", 0o755)
-		if err != nil {
-			fmt.Println(err)
-		}
-		defer tmpfile.Close()
+		defer func() { _ = tmpFile.Close() }()
 
 		content := []byte("temporary")
-		if _, err := tmpfile.Write(content); err != nil {
+		if _, err := tmpFile.Write(content); err != nil {
 			log.Fatal(err)
 		}
 
-		if err := tmpfile.Commit(); err != nil {
+		if err := tmpFile.Commit(); err != nil {
 			log.Fatal(err)
 		}
 
 		var result Environment
-		result, err = ReadDir("/tmp/testdir")
+		result, err = ReadDir(tmpDir)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -84,29 +88,30 @@ func TestWithFiles(t *testing.T) {
 	})
 
 	t.Run("reading multiline file", func(t *testing.T) {
-		err := os.Mkdir("/tmp/testdir", 0o755)
-		defer func() { _ = os.RemoveAll("/tmp/testdir") }()
+		tmpDir, err := os.MkdirTemp("", "*")
 		if err != nil {
-			fmt.Println(err)
+			panic(err)
 		}
 
-		tmpfile, err := safefile.Create("/tmp/testdir/file.txt", 0o755)
+		defer func() { _ = os.RemoveAll(tmpDir) }()
+
+		tmpFile, err := safefile.Create(path.Join(tmpDir, "file.txt"), 0o755)
 		if err != nil {
 			fmt.Println(err)
 		}
-		defer func() { _ = tmpfile.Close() }()
+		defer func() { _ = tmpFile.Close() }()
 
 		content1 := []byte("the first line\nthe second line\nthe third line")
-		if _, err := tmpfile.Write(content1); err != nil {
+		if _, err := tmpFile.Write(content1); err != nil {
 			log.Fatal(err)
 		}
 
-		if err := tmpfile.Commit(); err != nil {
+		if err := tmpFile.Commit(); err != nil {
 			log.Fatal(err)
 		}
 
 		var result Environment
-		result, err = ReadDir("/tmp/testdir")
+		result, err = ReadDir(tmpDir)
 		if err != nil {
 			fmt.Println(err)
 		}
