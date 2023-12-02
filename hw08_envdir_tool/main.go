@@ -6,8 +6,13 @@ import (
 )
 
 func main() {
+	if len(os.Args) < 2 {
+		return
+	}
+
 	path := os.Args[1]
 	command := os.Args[2:]
+
 	env, err := ReadDir(path)
 	if err != nil {
 		fmt.Println(err)
