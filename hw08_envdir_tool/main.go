@@ -18,5 +18,12 @@ func main() {
 		fmt.Println(err)
 		_, _ = os.Stderr.WriteString(err.Error())
 	}
+	// fmt.Printf("\n***ENV EPNPT: (%v)***\n", env["EMPTY"])
+	// fmt.Printf("\n***ENV UNSET: (%v)***\n", env["EMPTY"])
+	// fmt.Printf("\nSTART")
+	// fmt.Printf("===========================\n")
+	// fmt.Printf("ENV: %v\n", env)
+	// fmt.Printf("\n===========================")
+	// fmt.Printf("============================END\n")
 	RunCmd(command, env)
 }
