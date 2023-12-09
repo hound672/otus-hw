@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"bytes"
 	"fmt"
 	"os"
 	"strings"
@@ -28,12 +29,18 @@ func ReadDir(dir string) (Environment, error) {
 		if !strings.Contains(name, "=") {
 			file, err := os.OpenFile(dir+"/"+name, os.O_RDONLY, 0o755)
 			if err != nil {
-				fmt.Println(err)
+				return nil, fmt.Errorf("open file: %w", err)
 			}
 			defer func() { _ = file.Close() }()
 			scanner := bufio.NewScanner(file)
 			scanner.Scan()
-			list[name] = scanner.Text()
+
+			rawEnv := scanner.Bytes()
+			envValue := string(bytes.ReplaceAll(rawEnv, []byte("\x00"), []byte("\n")))
+			envValue = strings.Trim(envValue, "\t")
+			envValue = strings.TrimRight(envValue, " ")
+
+			list[name] = envValue
 
 			if err := scanner.Err(); err != nil {
 				fmt.Println(name, " err: ", err)
