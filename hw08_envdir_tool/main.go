@@ -17,6 +17,7 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 		_, _ = os.Stderr.WriteString(err.Error())
+		return
 	}
 
 	RunCmd(command, env)

@@ -37,13 +37,12 @@ func ReadDir(dir string) (Environment, error) {
 
 			rawEnv := scanner.Bytes()
 			envValue := string(bytes.ReplaceAll(rawEnv, []byte("\x00"), []byte("\n")))
-			envValue = strings.Trim(envValue, "\t")
 			envValue = strings.TrimRight(envValue, " ")
 
 			list[name] = envValue
 
 			if err := scanner.Err(); err != nil {
-				fmt.Println(name, " err: ", err)
+				return nil, fmt.Errorf("scanner.Err: %w", err)
 			}
 		}
 	}
