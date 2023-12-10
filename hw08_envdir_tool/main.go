@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"os"
 )
 
@@ -15,9 +15,8 @@ func main() {
 
 	env, err := ReadDir(path)
 	if err != nil {
-		fmt.Println(err)
 		_, _ = os.Stderr.WriteString(err.Error())
-		return
+		log.Fatalf("Err ReadEnv: %v", err)
 	}
 
 	RunCmd(command, env)
