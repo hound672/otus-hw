@@ -6,7 +6,7 @@ $(eval $(RUN_ARGS):;@:)
 BIN := "./bin/calendar"
 DOCKER_IMG="calendar:develop"
 LOCAL_BIN:=$(CURDIR)/bin
-GOLANGCI_TAG:=1.50.1
+GOLANGCI_TAG:=1.54.2
 PATH:=$(PATH):$(LOCAL_BIN)
 
 # slq migrate
