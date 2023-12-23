@@ -14,11 +14,13 @@ type ValidationError struct {
 	Err   error
 }
 
-var ErrRegexp = errors.New("value does not match regular expression")
-var ErrLen = errors.New("length of string does not match expected")
-var ErrMax = errors.New("value is larger than max")
-var ErrMin = errors.New("value is less than min")
-var ErrIn = errors.New("actual value is not allowed")
+var (
+	ErrRegexp = errors.New("value does not match regular expression")
+	ErrLen    = errors.New("length of string does not match expected")
+	ErrMax    = errors.New("value is larger than max")
+	ErrMin    = errors.New("value is less than min")
+	ErrIn     = errors.New("actual value is not allowed")
+)
 
 type ValidationErrors []ValidationError
 
@@ -58,6 +60,7 @@ func Validate(iv interface{}) error {
 	}
 	return er
 }
+
 func validateByKind(field string, value reflect.Value, tags []string, er ValidationErrors) (*ValidationErrors, error) {
 	var err error
 	switch {
@@ -75,6 +78,7 @@ func validateByKind(field string, value reflect.Value, tags []string, er Validat
 	}
 	return &er, err
 }
+
 func typeSwitch(fieldName string, val interface{}, tags []string, er ValidationErrors) (ValidationErrors, error) {
 	var err error
 	switch h := val.(type) {
@@ -109,6 +113,7 @@ func validateStringByTag(field string, value string, tags []string, er Validatio
 	}
 	return er, err
 }
+
 func validateIntByTag(field string, value int, tags []string, er ValidationErrors) (ValidationErrors, error) {
 	var err error
 	for _, tag := range tags {
@@ -156,6 +161,7 @@ func inValidate(fieldName string, value string, tagValue string, er ValidationEr
 	}
 	return er
 }
+
 func regexpValidate(fieldName string, value string, tagValue string, er ValidationErrors) (ValidationErrors, error) {
 	var e ValidationError
 	matched, err := regexp.Match(tagValue, []byte(value))
@@ -169,6 +175,7 @@ func regexpValidate(fieldName string, value string, tagValue string, er Validati
 	}
 	return er, nil
 }
+
 func minValidate(fieldName string, value int, tagValue string, er ValidationErrors) (ValidationErrors, error) {
 	var e ValidationError
 	i, err := strconv.Atoi(tagValue)
@@ -182,6 +189,7 @@ func minValidate(fieldName string, value int, tagValue string, er ValidationErro
 	}
 	return er, nil
 }
+
 func maxValidate(fieldName string, value int, tagValue string, er ValidationErrors) (ValidationErrors, error) {
 	var e ValidationError
 	i, err := strconv.Atoi(tagValue)

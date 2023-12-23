@@ -9,8 +9,10 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-type UserRole string
-type NumberWrapper int
+type (
+	UserRole      string
+	NumberWrapper int
+)
 
 // Test the function on different structures and other types.
 type (
@@ -129,7 +131,8 @@ func TestValidateStruct(t *testing.T) {
 					Err:   ErrIn,
 				},
 			},
-		}, {
+		},
+		{
 			in: Response2{
 				Code: 404,
 			},
