@@ -44,7 +44,8 @@ show_cover:
 
 .PHONY: lint
 lint: install-lint
-	golangci-lint run ./...
+	#golangci-lint run ./...
+	$(LOCAL_BIN)/golangci-lint run
 
 .PHONY: quality
 quality: linter tests_integration

@@ -1,8 +1,7 @@
 package usecases
 
 type (
-	UseCases struct {
-	}
+	UseCases struct{}
 )
 
 func New() *UseCases {
