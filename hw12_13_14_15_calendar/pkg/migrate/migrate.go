@@ -19,7 +19,6 @@ type Migrate struct {
 	dialect string
 }
 
-// New create sql-migrate wrapper
 func New(
 	db *sql.DB,
 	content embed.FS,

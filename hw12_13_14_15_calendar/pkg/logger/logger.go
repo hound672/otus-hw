@@ -18,7 +18,7 @@ type Logger interface {
 }
 
 func InitLogger(config *Config) error {
-	var levelMapping = map[string]slog.Level{
+	levelMapping := map[string]slog.Level{
 		"debug": slog.LevelDebug,
 		"info":  slog.LevelInfo,
 		"warn":  slog.LevelWarn,

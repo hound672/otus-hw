@@ -9,8 +9,7 @@ import (
 	"github.com/hound672/otus-hw/hw12_13_14_15_calendar/pkg/logger"
 )
 
-type Application struct {
-}
+type Application struct{}
 
 func CreateApplication() (*Application, func(), error) {
 	ctx := context.Background()
