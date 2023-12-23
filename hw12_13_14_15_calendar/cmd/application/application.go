@@ -25,28 +25,22 @@ func CreateApplication() (*Application, func(), error) {
 		return nil, nil, fmt.Errorf("logger.InitLogger: %w", err)
 	}
 
-	// app, cleanup, err := initApp(ctx, appConfig)
-	// if err != nil {
-	// 	return nil, nil, err
-	// }
+	app, cleanup, err := initApp(ctx, appConfig)
+	if err != nil {
+		return nil, nil, err
+	}
 
 	stopApplication := func() {
 		logger.Info("Stop application")
-		// cleanup()
-		// app.server.Stop()
+		cleanup()
 		logger.Info("All done")
 	}
 
-	// return app, stopApplication, nil
-	return nil, stopApplication, nil
+	return app, stopApplication, nil
 }
 
 func (app *Application) Run() error {
 	logger.Info("Start calendar service", "version", build.Version)
-
-	// if err := app.server.Run(app.dastController); err != nil {
-	// 	return fmt.Errorf("app.server.Run: %w", err)
-	// }
 
 	return nil
 }

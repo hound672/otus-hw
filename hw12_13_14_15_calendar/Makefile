@@ -60,8 +60,8 @@ quality: linter tests_integration
 clean_cache:
 	go clean -cache
 
-.PHONY: build_binary
-build_binary:
+.PHONY: build
+build:
 	go build -ldflags="-X github.com/hound672/otus-hw/hw12_13_14_15_calendar/build.Version=$(VERSION)" -v -o calendar ./cmd
 
 .PHONY: build_docker
