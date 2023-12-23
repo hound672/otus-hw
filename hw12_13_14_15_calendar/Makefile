@@ -43,7 +43,7 @@ show_cover:
 	go tool cover -html=coverage.out
 
 .PHONY: lint
-lint:
+lint: install-lint
 	golangci-lint run ./...
 
 .PHONY: quality
