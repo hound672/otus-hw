@@ -52,7 +52,11 @@ func New(config *Config) (*Server, error) {
 	// building http server
 	hmux := chi.NewRouter()
 	httpServer := &http.Server{
-		Handler: hmux,
+		Handler:           hmux,
+		ReadTimeout:       time.Duration(config.HTTPReadTimeout) * time.Second,
+		WriteTimeout:      time.Duration(config.HTTPWriteTimeout) * time.Second,
+		IdleTimeout:       time.Duration(config.HTTPIdleTimeout) * time.Second,
+		ReadHeaderTimeout: time.Duration(config.HTTPReadHeaderTimeout) * time.Second,
 	}
 
 	s := &Server{

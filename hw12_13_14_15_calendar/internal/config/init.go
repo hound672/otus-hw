@@ -40,9 +40,13 @@ func Init() (*AppConfig, error) {
 	// server config
 	viperServer := v.Sub("server")
 	serverConfig := &server.Config{
-		UseReflection: viperServer.GetBool("use_reflection"),
-		PortGRPC:      viperServer.GetInt("port_grpc"),
-		PortHTTP:      viperServer.GetInt("port_http"),
+		UseReflection:         viperServer.GetBool("use_reflection"),
+		PortGRPC:              viperServer.GetInt("port_grpc"),
+		PortHTTP:              viperServer.GetInt("port_http"),
+		HTTPReadTimeout:       viperServer.GetInt("http_read_timeout"),
+		HTTPWriteTimeout:      viperServer.GetInt("http_write_timeout"),
+		HTTPIdleTimeout:       viperServer.GetInt("http_idle_timeout"),
+		HTTPReadHeaderTimeout: viperServer.GetInt("http_read_header_timeout"),
 	}
 
 	// postgres config

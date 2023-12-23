@@ -5,4 +5,9 @@ type Config struct {
 
 	PortGRPC int
 	PortHTTP int
+
+	HTTPReadTimeout       int
+	HTTPWriteTimeout      int
+	HTTPIdleTimeout       int
+	HTTPReadHeaderTimeout int
 }
