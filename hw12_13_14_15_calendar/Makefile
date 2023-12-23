@@ -34,8 +34,8 @@ endif
 .PHONY: install
 install: .bin-deps install-lint
 
-.PHONY: tests
-tests:
+.PHONY: test
+test:
 	go test -race -coverprofile=coverage.out ./...
 
 .PHONY: show_cover
