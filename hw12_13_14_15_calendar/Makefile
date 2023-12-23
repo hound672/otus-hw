@@ -6,7 +6,7 @@ $(eval $(RUN_ARGS):;@:)
 BIN := "./bin/calendar"
 DOCKER_IMG="calendar:develop"
 LOCAL_BIN:=$(CURDIR)/bin
-GOLANGCI_TAG:=v1.50.1
+GOLANGCI_TAG:=1.50.1
 PATH:=$(PATH):$(LOCAL_BIN)
 
 .PHONY: .bin-deps
@@ -42,8 +42,8 @@ tests:
 show_cover:
 	go tool cover -html=coverage.out
 
-.PHONY: linter
-linter:
+.PHONY: lint
+lint:
 	$(LOCAL_BIN)/golangci-lint run --fix
 
 .PHONY: quality
