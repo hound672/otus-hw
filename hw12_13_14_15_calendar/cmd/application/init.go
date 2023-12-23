@@ -13,6 +13,7 @@ import (
 
 func initApp(ctx context.Context, appConfig *config.AppConfig) (*Application, func(), error) {
 	panic(wire.Build(
+		initServer,
 		wire.Struct(new(Application), "*"),
 	))
 }

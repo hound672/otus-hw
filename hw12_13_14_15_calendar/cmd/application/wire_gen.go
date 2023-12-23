@@ -9,12 +9,20 @@ package application
 import (
 	"context"
 	"github.com/hound672/otus-hw/hw12_13_14_15_calendar/internal/config"
+	"github.com/hound672/otus-hw/hw12_13_14_15_calendar/pkg/server"
 )
 
 // Injectors from init.go:
 
 func initApp(ctx context.Context, appConfig *config.AppConfig) (*Application, func(), error) {
-	application := &Application{}
+	serverConfig := appConfig.Server
+	serverServer, err := server.New(serverConfig)
+	if err != nil {
+		return nil, nil, err
+	}
+	application := &Application{
+		server: serverServer,
+	}
 	return application, func() {
 	}, nil
 }

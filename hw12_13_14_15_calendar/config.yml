@@ -1,0 +1,18 @@
+logger:
+  level: ${LOGGER_LEVEL}
+
+server:
+  use_reflection: ${SERVER_USE_REFLECTION}
+  port_grpc: ${SERVER_PORT_GRPC}
+  port_http: ${SERVER_PORT_HTTP}
+
+centrifugo:
+  url: ${CENTRIFUGO_URL}
+  skip_tls: ${CENTRIFUGO_SKIP_TLS}
+
+postgres:
+  host: ${POSTGRES_HOST}
+  port: ${POSTGRES_PORT}
+  username: ${POSTGRES_USERNAME}
+  password: ${POSTGRES_PASSWORD}
+  database: ${POSTGRES_DATABASE}
