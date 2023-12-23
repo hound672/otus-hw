@@ -9,11 +9,17 @@ LOCAL_BIN:=$(CURDIR)/bin
 GOLANGCI_TAG:=1.50.1
 PATH:=$(PATH):$(LOCAL_BIN)
 
+# slq migrate
+SQL_MIGRATE_CONFIG:=./sql-migrate.yml
+SQL_MIGRATE_ENV:=db
+.sql-migrate = $(LOCAL_BIN)/sql-migrate $1 -config=$(SQL_MIGRATE_CONFIG) -env=$(SQL_MIGRATE_ENV) $2
+
 .PHONY: .bin-deps
 .bin-deps:
 	$(info Installing binary dependencies...)
 	mkdir -p $(LOCAL_BIN)
 	GOBIN=$(LOCAL_BIN) go mod tidy
+	GOBIN=$(LOCAL_BIN) go install github.com/google/wire/cmd/wire@v0.5.0 && \
 	GOBIN=$(LOCAL_BIN) go install github.com/vektra/mockery/v2@v2.38.0 && \
 	GOBIN=$(LOCAL_BIN) go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.31.0 && \
 	GOBIN=$(LOCAL_BIN) go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.3.0 && \
