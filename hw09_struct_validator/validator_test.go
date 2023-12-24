@@ -60,7 +60,7 @@ type (
 func TestValidateStruct(t *testing.T) {
 	tests := []struct {
 		in          interface{}
-		expectedErr ValidationErrors
+		expectedErr error
 	}{
 		{
 			in: User{
@@ -150,7 +150,7 @@ func TestValidateStruct(t *testing.T) {
 	for i, tt := range tests {
 		t.Run(fmt.Sprintf("case %d", i), func(t *testing.T) {
 			err := Validate(tt.in)
-			assert.Equal(t, &tt.expectedErr, err)
+			assert.Equal(t, tt.expectedErr, err)
 		})
 	}
 }
@@ -176,7 +176,7 @@ func TestValidateInternalProgramError(t *testing.T) {
 			in: Request{
 				Phone: "218",
 			},
-			expectedInternalProgramError: "match error: error parsing regexp: missing closing ): `(`",
+			expectedInternalProgramError: "regexp.Compile error: error parsing regexp: missing closing ): `(`",
 		},
 	}
 
