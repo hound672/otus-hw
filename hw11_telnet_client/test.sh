@@ -26,6 +26,8 @@ TELNET client'
 fileEquals /tmp/nc.out "${expected_nc_out}"
 
 echo "!!!"
+cat /tmp/nc.out
+echo "====="
 cat /tmp/telnet.out
 echo "!!!"
 
