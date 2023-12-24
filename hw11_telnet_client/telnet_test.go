@@ -90,7 +90,7 @@ func TestTelnetClient(t *testing.T) {
 		timeout, err := time.ParseDuration("0s")
 		require.NoError(t, err)
 
-		client := NewTelnetClient("rbc.ru:80", timeout, io.NopCloser(in), out)
+		client := NewTelnetClient("ya.ru:80", timeout, io.NopCloser(in), out)
 		require.NoError(t, client.Connect())
 
 		err = client.Close()
@@ -110,7 +110,7 @@ func TestTelnetClient(t *testing.T) {
 		timeout, err := time.ParseDuration("0s")
 		require.NoError(t, err)
 
-		client := NewTelnetClient("rbc.ru:80", timeout, io.NopCloser(in), out)
+		client := NewTelnetClient("ya.ru:80", timeout, io.NopCloser(in), out)
 		require.NoError(t, client.Connect())
 
 		r, w, _ := os.Pipe()
