@@ -30,6 +30,7 @@ func getLenValidate(fieldName string, tagValue string) (validatorFuncStr, error)
 	return validatorFunc, nil
 }
 
+//nolint:unparam // just to math the interface
 func getInStrValidate(fieldName string, tagValue string) (validatorFuncStr, error) {
 	dict := strings.Split(tagValue, ",")
 

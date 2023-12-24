@@ -87,6 +87,7 @@ func validateByKind(field string, value reflect.Value, tags []string) (Validatio
 	return nil, fmt.Errorf("unknown type: %v", value.Kind())
 }
 
+//nolint:gocognit // separated funcs will be harder to read
 func typeSwitch(fieldName string, val interface{}, tags []string) (ValidationErrors, error) {
 	var validationErrors ValidationErrors
 
