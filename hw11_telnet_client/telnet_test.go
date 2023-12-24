@@ -2,7 +2,7 @@ package main
 
 import (
 	"bytes"
-	"io/ioutil"
+	"io"
 	"net"
 	"os"
 	"sync"
@@ -30,7 +30,7 @@ func TestTelnetClient(t *testing.T) {
 			timeout, err := time.ParseDuration("10s")
 			require.NoError(t, err)
 
-			client := NewTelnetClient(l.Addr().String(), timeout, ioutil.NopCloser(in), out)
+			client := NewTelnetClient(l.Addr().String(), timeout, io.NopCloser(in), out)
 			require.NoError(t, client.Connect())
 			defer func() { require.NoError(t, client.Close()) }()
 
@@ -74,7 +74,7 @@ func TestTelnetClient(t *testing.T) {
 		timeout, err := time.ParseDuration("5s")
 		require.NoError(t, err)
 
-		client := NewTelnetClient("invalid:80", timeout, ioutil.NopCloser(in), out)
+		client := NewTelnetClient("invalid:80", timeout, io.NopCloser(in), out)
 		err = client.Connect()
 		require.Error(t, err)
 	})
@@ -90,7 +90,7 @@ func TestTelnetClient(t *testing.T) {
 		timeout, err := time.ParseDuration("0s")
 		require.NoError(t, err)
 
-		client := NewTelnetClient("rbc.ru:80", timeout, ioutil.NopCloser(in), out)
+		client := NewTelnetClient("rbc.ru:80", timeout, io.NopCloser(in), out)
 		require.NoError(t, client.Connect())
 
 		err = client.Close()
@@ -110,7 +110,7 @@ func TestTelnetClient(t *testing.T) {
 		timeout, err := time.ParseDuration("0s")
 		require.NoError(t, err)
 
-		client := NewTelnetClient("rbc.ru:80", timeout, ioutil.NopCloser(in), out)
+		client := NewTelnetClient("rbc.ru:80", timeout, io.NopCloser(in), out)
 		require.NoError(t, client.Connect())
 
 		r, w, _ := os.Pipe()
@@ -122,5 +122,4 @@ func TestTelnetClient(t *testing.T) {
 		err = client.Send()
 		require.Error(t, err) // dynamic port + file already closed error
 	})
-
 }
