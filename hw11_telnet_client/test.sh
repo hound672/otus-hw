@@ -26,6 +26,9 @@ am
 TELNET client'
 fileEquals /tmp/nc.out "${expected_nc_out}"
 
+echo "!!!"
+cat /tmp/telnet.out
+
 expected_telnet_out='Hello
 From
 NC'
