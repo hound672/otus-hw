@@ -74,7 +74,7 @@ func TestTelnetClient(t *testing.T) {
 		timeout, err := time.ParseDuration("5s")
 		require.NoError(t, err)
 
-		client := NewTelnetClient("ololo.com:80", timeout, ioutil.NopCloser(in), out)
+		client := NewTelnetClient("invalid:80", timeout, ioutil.NopCloser(in), out)
 		err = client.Connect()
 		require.Error(t, err)
 	})
