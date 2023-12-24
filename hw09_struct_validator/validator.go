@@ -83,55 +83,59 @@ func typeSwitch(fieldName string, val interface{}, tags []string, er ValidationE
 	var err error
 	switch h := val.(type) {
 	case int:
-		er, err = validateIntByTag(fieldName, h, tags, er)
+		er, err = getValidateIntByTag(fieldName, h, tags, er)
 	case string:
-		er, err = validateStringByTag(fieldName, h, tags, er)
+		er, err = getValidateStringByTag(fieldName, h, tags, er)
 	case []string:
 		for _, v := range h {
-			er, err = validateStringByTag(fieldName, v, tags, er)
+			er, err = getValidateStringByTag(fieldName, v, tags, er)
 		}
 	case []int:
 		for _, v := range h {
-			er, err = validateIntByTag(fieldName, v, tags, er)
+			er, err = getValidateIntByTag(fieldName, v, tags, er)
 		}
 	}
 	return er, err
 }
 
-func validateStringByTag(field string, value string, tags []string, er ValidationErrors) (ValidationErrors, error) {
+// base constructors
+
+func getValidateStringByTag(field string, value string, tags []string, er ValidationErrors) (ValidationErrors, error) {
 	var err error
 	for _, tag := range tags {
 		tagValue := strings.Split(tag, ":")[1]
 		switch {
 		case strings.HasPrefix(tag, "len:"):
-			er, err = lenValidate(field, value, tagValue, er)
+			er, err = getLenValidate(field, value, tagValue, er)
 		case strings.HasPrefix(tag, "in:"):
-			er = inValidate(field, value, tagValue, er)
+			er = getInValidate(field, value, tagValue, er)
 		case strings.HasPrefix(tag, "regexp:"):
-			er, err = regexpValidate(field, value, tagValue, er)
+			er, err = getRegexpValidate(field, value, tagValue, er)
 		}
 	}
 	return er, err
 }
 
-func validateIntByTag(field string, value int, tags []string, er ValidationErrors) (ValidationErrors, error) {
+func getValidateIntByTag(field string, value int, tags []string, er ValidationErrors) (ValidationErrors, error) {
 	var err error
 	for _, tag := range tags {
 		tagValue := strings.Split(tag, ":")[1]
 		switch {
 		case strings.HasPrefix(tag, "in:"):
 			i := strconv.Itoa(value)
-			er = inValidate(field, i, tagValue, er)
+			er = getInValidate(field, i, tagValue, er)
 		case strings.HasPrefix(tag, "min:"):
-			er, err = minValidate(field, value, tagValue, er)
+			er, err = getMinValidate(field, value, tagValue, er)
 		case strings.HasPrefix(tag, "max:"):
-			er, err = maxValidate(field, value, tagValue, er)
+			er, err = getMaxValidate(field, value, tagValue, er)
 		}
 	}
 	return er, err
 }
 
-func lenValidate(fieldName string, value string, tagValue string, er ValidationErrors) (ValidationErrors, error) {
+// validators
+
+func getLenValidate(fieldName string, value string, tagValue string, er ValidationErrors) (ValidationErrors, error) {
 	var e ValidationError
 	i, err := strconv.Atoi(tagValue)
 	if err != nil {
@@ -145,7 +149,9 @@ func lenValidate(fieldName string, value string, tagValue string, er ValidationE
 	return er, nil
 }
 
-func inValidate(fieldName string, value string, tagValue string, er ValidationErrors) ValidationErrors {
+// strings
+
+func getInValidate(fieldName string, value string, tagValue string, er ValidationErrors) ValidationErrors {
 	var e ValidationError
 	dict := strings.Split(tagValue, ",")
 	var ok bool
@@ -162,7 +168,7 @@ func inValidate(fieldName string, value string, tagValue string, er ValidationEr
 	return er
 }
 
-func regexpValidate(fieldName string, value string, tagValue string, er ValidationErrors) (ValidationErrors, error) {
+func getRegexpValidate(fieldName string, value string, tagValue string, er ValidationErrors) (ValidationErrors, error) {
 	var e ValidationError
 	matched, err := regexp.Match(tagValue, []byte(value))
 	if err != nil {
@@ -176,7 +182,9 @@ func regexpValidate(fieldName string, value string, tagValue string, er Validati
 	return er, nil
 }
 
-func minValidate(fieldName string, value int, tagValue string, er ValidationErrors) (ValidationErrors, error) {
+// ints
+
+func getMinValidate(fieldName string, value int, tagValue string, er ValidationErrors) (ValidationErrors, error) {
 	var e ValidationError
 	i, err := strconv.Atoi(tagValue)
 	if err != nil {
@@ -190,7 +198,7 @@ func minValidate(fieldName string, value int, tagValue string, er ValidationErro
 	return er, nil
 }
 
-func maxValidate(fieldName string, value int, tagValue string, er ValidationErrors) (ValidationErrors, error) {
+func getMaxValidate(fieldName string, value int, tagValue string, er ValidationErrors) (ValidationErrors, error) {
 	var e ValidationError
 	i, err := strconv.Atoi(tagValue)
 	if err != nil {
