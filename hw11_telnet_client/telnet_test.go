@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"io"
 	"net"
+	"os"
 	"sync"
 	"testing"
 	"time"
@@ -61,5 +62,64 @@ func TestTelnetClient(t *testing.T) {
 		}()
 
 		wg.Wait()
+	})
+	t.Run("host invalid, connection error", func(t *testing.T) {
+		l, err := net.Listen("tcp", "127.0.0.1:")
+		require.NoError(t, err)
+		defer func() { require.NoError(t, l.Close()) }()
+
+		in := &bytes.Buffer{}
+		out := &bytes.Buffer{}
+
+		timeout, err := time.ParseDuration("5s")
+		require.NoError(t, err)
+
+		client := NewTelnetClient("invalid:80", timeout, io.NopCloser(in), out)
+		err = client.Connect()
+		require.Error(t, err)
+	})
+
+	t.Run("close connection error", func(t *testing.T) {
+		l, err := net.Listen("tcp", "127.0.0.1:")
+		require.NoError(t, err)
+		defer func() { require.NoError(t, l.Close()) }()
+
+		in := &bytes.Buffer{}
+		out := &bytes.Buffer{}
+
+		timeout, err := time.ParseDuration("0s")
+		require.NoError(t, err)
+
+		client := NewTelnetClient("ya.ru:80", timeout, io.NopCloser(in), out)
+		require.NoError(t, client.Connect())
+
+		err = client.Close()
+		require.NoError(t, err)
+		err = client.Close()
+		require.Error(t, err)
+	})
+
+	t.Run("Ctrl + D", func(t *testing.T) {
+		l, err := net.Listen("tcp", "127.0.0.1:")
+		require.NoError(t, err)
+		defer func() { require.NoError(t, l.Close()) }()
+
+		in := &bytes.Buffer{}
+		out := &bytes.Buffer{}
+
+		timeout, err := time.ParseDuration("0s")
+		require.NoError(t, err)
+
+		client := NewTelnetClient("ya.ru:80", timeout, io.NopCloser(in), out)
+		require.NoError(t, client.Connect())
+
+		r, w, _ := os.Pipe()
+		client.out = w
+		client.in = r
+		client.in.Close()
+
+		in.WriteString("hello\n")
+		err = client.Send()
+		require.Error(t, err) // dynamic port + file already closed error
 	})
 }
