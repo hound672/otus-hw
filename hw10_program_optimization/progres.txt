@@ -24,3 +24,19 @@ BenchmarkGetDomainStat-16            458           2435046 ns/op          634237
 PASS
 ok      github.com/hound672/otus-hw/hw10_program_optimization   5.738s
 ```
+
+Compile regexp:
+
+```
+go test -v  -tags bench -bench . -benchmem -run BenchmarkGetDomainStat -memprofile=memory.out -cpuprofile cpu.out
+goos: linux
+goarch: amd64
+pkg: github.com/hound672/otus-hw/hw10_program_optimization
+cpu: AMD Ryzen 7 PRO 3700 8-Core Processor
+BenchmarkGetDomainStat
+BenchmarkGetDomainStat-16            548           2103875 ns/op          281954 B/op       1546 allocs/op
+PASS
+ok      github.com/hound672/otus-hw/hw10_program_optimization   3.122s
+```
+
+### After compile regexp bench passed by cpu, but not memory
