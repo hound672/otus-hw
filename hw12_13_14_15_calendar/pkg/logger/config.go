@@ -1,5 +1,5 @@
 package logger
 
 type Config struct {
-	Level string
+	Level string `mapstructure:"level"`
 }

@@ -1,9 +1,9 @@
 package postgres
 
 type Config struct {
-	Host     string
-	Port     int
-	Username string
-	Password string
-	Database string
+	Host     string `mapstructure:"host"`
+	Port     int    `mapstructure:"port"`
+	Username string `mapstructure:"username"`
+	Password string `mapstructure:"password"`
+	Database string `mapstructure:"database"`
 }
