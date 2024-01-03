@@ -26,3 +26,7 @@ linter:
 .PHONY: easyjson
 easyjson:
 	$(LOCAL_BIN)/easyjson -pkg
+
+.PHONY: bench
+bench:
+	go test -v -count=1 -timeout=30s -tags bench .
