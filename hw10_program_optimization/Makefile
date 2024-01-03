@@ -33,6 +33,10 @@ easyjson:
 bench:
 	go test -v  -tags bench -bench . -benchmem -run BenchmarkGetDomainStat -memprofile=$(MEMORY_PROFILE_FILE) -cpuprofile $(CPU_PROFILE_FILE)
 
+.PHONY: bench_result
+bench_result:
+	go test -v -count=1 -timeout=30s -tags bench .
+
 .PHONY: clear_bench
 clear_bench:
 	rm *.out
