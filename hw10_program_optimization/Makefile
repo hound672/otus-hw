@@ -29,4 +29,8 @@ easyjson:
 
 .PHONY: bench
 bench:
-	go test -v -count=1 -timeout=30s -tags bench .
+	go test -v -count=1 -timeout=30s -tags bench . -memprofile=memory.out -cpuprofile cpu.out
+
+.PHONY: clear_bench
+clear_bench:
+	rm *.out
