@@ -1,7 +1,7 @@
 LOCAL_BIN:=$(CURDIR)/bin
 GOLANGCI_TAG:=1.54.2
 MEMORY_PROFILE_FILE=memory.out
-CPU_PROFILE_FILE=memory.out
+CPU_PROFILE_FILE=cpu.out
 
 .PHONY: .bin-deps
 .bin-deps:
