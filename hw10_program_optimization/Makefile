@@ -5,6 +5,7 @@ GOLANGCI_TAG:=1.54.2
 .bin-deps:
 	$(info Installing binary dependencies...)
 	mkdir -p $(LOCAL_BIN)
+	GOBIN=$(LOCAL_BIN) go install github.com/mailru/easyjson/...@v0.7.7
 
 # install golangci-lint binary
 .PHONY: install-lint
@@ -21,3 +22,7 @@ install: .bin-deps install-lint
 .PHONY: linter
 linter:
 	$(LOCAL_BIN)/golangci-lint run --fix
+
+.PHONY: easyjson
+easyjson:
+	$(LOCAL_BIN)/easyjson -pkg

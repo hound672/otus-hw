@@ -8,6 +8,7 @@ import (
 	"strings"
 )
 
+//easyjson:json
 type User struct {
 	ID       int
 	Name     string
