@@ -1,5 +1,7 @@
 LOCAL_BIN:=$(CURDIR)/bin
 GOLANGCI_TAG:=1.54.2
+MEMORY_PROFILE_FILE=memory.out
+CPU_PROFILE_FILE=memory.out
 
 .PHONY: .bin-deps
 .bin-deps:
@@ -29,8 +31,16 @@ easyjson:
 
 .PHONY: bench
 bench:
-	go test -v -count=1 -timeout=30s -tags bench . -memprofile=memory.out -cpuprofile cpu.out
+	go test -v -count=1 -timeout=30s -tags bench . -memprofile=$(MEMORY_PROFILE_FILE) -cpuprofile $(CPU_PROFILE_FILE)
 
 .PHONY: clear_bench
 clear_bench:
 	rm *.out
+
+.PHONY: pprof_mem
+pprof_mem:
+	go tool pprof -http=:8000 $(MEMORY_PROFILE_FILE)
+
+.PHONY: pprof_cpu
+pprof_cpu:
+	go tool pprof -http=:8000 $(CPU_PROFILE_FILE)
