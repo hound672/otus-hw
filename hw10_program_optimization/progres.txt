@@ -1,0 +1,26 @@
+Start:
+
+```
+goos: linux
+goarch: amd64
+pkg: github.com/hound672/otus-hw/hw10_program_optimization
+cpu: AMD Ryzen 7 PRO 3700 8-Core Processor
+BenchmarkGetDomainStat
+BenchmarkGetDomainStat-16            324           3190594 ns/op          978681 B/op       8789 allocs/op
+PASS
+ok      github.com/hound672/otus-hw/hw10_program_optimization   7.447s
+```
+
+With easyjson:
+
+```
+go test -v  -tags bench -bench . -benchmem -run BenchmarkGetDomainStat -memprofile=memory.out -cpuprofile cpu.out
+goos: linux
+goarch: amd64
+pkg: github.com/hound672/otus-hw/hw10_program_optimization
+cpu: AMD Ryzen 7 PRO 3700 8-Core Processor
+BenchmarkGetDomainStat
+BenchmarkGetDomainStat-16            458           2435046 ns/op          634237 B/op       5561 allocs/op
+PASS
+ok      github.com/hound672/otus-hw/hw10_program_optimization   5.738s
+```
