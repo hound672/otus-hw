@@ -51,6 +51,11 @@ func New(config *Config) (*Server, error) {
 
 	// building http server
 	hmux := chi.NewRouter()
+
+	// TODO: remove after migrate to gRPC gateway
+	hmux.Use(loggerMiddleware)
+	hmux.Get("/", helloWorld)
+
 	httpServer := &http.Server{
 		Handler:           hmux,
 		ReadTimeout:       time.Duration(config.HTTPReadTimeout) * time.Second,
