@@ -1,3 +1,4 @@
+//go:build !bench
 // +build !bench
 
 package hw10programoptimization
@@ -36,4 +37,64 @@ func TestGetDomainStat(t *testing.T) {
 		require.NoError(t, err)
 		require.Equal(t, DomainStat{}, result)
 	})
+}
+
+func Test_emailContainsDomain(t *testing.T) {
+	tests := []struct {
+		name           string
+		source         string
+		domain         string
+		expectedResult string
+	}{
+		{
+			name:           "success: qwerty@google.com",
+			source:         "qwerty@google.com",
+			domain:         "com",
+			expectedResult: "google.com",
+		},
+		{
+			name:           "success: ololo@google.com",
+			source:         "ololo@google.com",
+			domain:         "com",
+			expectedResult: "google.com",
+		},
+		{
+			name:           "success: ololo@amazon.com",
+			source:         "ololo@amazon.com",
+			domain:         "com",
+			expectedResult: "amazon.com",
+		},
+		{
+			name:           "success: ololo@aMazOn.com",
+			source:         "ololo@aMazOn.com",
+			domain:         "com",
+			expectedResult: "amazon.com",
+		},
+		{
+			name:           "success: 5Moore.com@Teklist.net",
+			source:         "5Moore.com@Teklist.net",
+			domain:         "com",
+			expectedResult: "",
+		},
+		{
+			name:           "does not contain: missed at(@)",
+			source:         "mail.com",
+			domain:         "com",
+			expectedResult: "",
+		},
+		{
+			name:           "does not contain: domain in email",
+			source:         "ru@google.com",
+			domain:         "ru",
+			expectedResult: "",
+		},
+	}
+
+	for _, tc := range tests {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			result := getDomainFromEmail(tc.source, tc.domain)
+			require.Equal(t, tc.expectedResult, result)
+		})
+	}
 }
