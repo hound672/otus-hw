@@ -54,3 +54,17 @@ BenchmarkGetDomainStat-16            165           6580035 ns/op           93658
 PASS
 ok      github.com/hound672/otus-hw/hw10_program_optimization   2.822s
 ```
+
+# Remove not used fields from struct
+
+```
+go test -v  -tags bench -bench . -benchmem -run BenchmarkGetDomainStat -memprofile=memory.out -cpuprofile cpu.out
+goos: linux
+goarch: amd64
+pkg: github.com/hound672/otus-hw/hw10_program_optimization
+cpu: AMD Ryzen 7 PRO 3700 8-Core Processor
+BenchmarkGetDomainStat
+BenchmarkGetDomainStat-16            612           1651633 ns/op           16118 B/op        419 allocs/op
+PASS
+ok      github.com/hound672/otus-hw/hw10_program_optimization   2.217s
+```
