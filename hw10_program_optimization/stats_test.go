@@ -61,6 +61,9 @@ func Test_countDomains(t *testing.T) {
 				User{
 					Email: "ololo@aMazOn.com",
 				},
+				User{
+					Email: "5Moore.com@Teklist.net",
+				},
 			},
 			domain: "com",
 			expectedResult: DomainStat{
@@ -73,6 +76,9 @@ func Test_countDomains(t *testing.T) {
 			source: users{
 				User{
 					Email: "qwerty@google.com",
+				},
+				User{
+					Email: "5Moore.com@Teklist.net",
 				},
 			},
 			domain:         "ru",
