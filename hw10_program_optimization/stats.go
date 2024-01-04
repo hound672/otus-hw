@@ -23,21 +23,21 @@ func GetDomainStat(r io.Reader, domain string) (DomainStat, error) {
 	return countDomains(u, domain)
 }
 
-type users [100_000]User
+type users []User
 
-func getUsers(r io.Reader) (result users, err error) {
+func getUsers(r io.Reader) (users, error) {
 	s := bufio.NewScanner(r)
-	cnt := 0
+	result := make(users, 0)
+
 	for s.Scan() {
 		var user User
-		if err = user.UnmarshalJSON(s.Bytes()); err != nil {
-			return
+		if err := user.UnmarshalJSON(s.Bytes()); err != nil {
+			return nil, fmt.Errorf("user.UnmarshalJSON: %w", err)
 		}
-		result[cnt] = user
-		cnt++
+		result = append(result, user)
 	}
 
-	return
+	return result, nil
 }
 
 func countDomains(u users, domain string) (DomainStat, error) {
