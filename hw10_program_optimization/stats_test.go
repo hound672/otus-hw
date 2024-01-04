@@ -39,87 +39,61 @@ func TestGetDomainStat(t *testing.T) {
 	})
 }
 
-func Test_countDomains(t *testing.T) {
+func Test_emailContainsDomain(t *testing.T) {
 	tests := []struct {
 		name           string
-		source         users
+		source         string
 		domain         string
-		expectedResult DomainStat
+		expectedResult string
 	}{
 		{
-			name: "success",
-			source: users{
-				User{
-					Email: "qwerty@google.com",
-				},
-				User{
-					Email: "ololo@google.com",
-				},
-				User{
-					Email: "ololo@amazon.com",
-				},
-				User{
-					Email: "ololo@aMazOn.com",
-				},
-				User{
-					Email: "5Moore.com@Teklist.net",
-				},
-			},
-			domain: "com",
-			expectedResult: DomainStat{
-				"google.com": 2,
-				"amazon.com": 2,
-			},
-		},
-		{
-			name: "no matches",
-			source: users{
-				User{
-					Email: "qwerty@google.com",
-				},
-				User{
-					Email: "5Moore.com@Teklist.net",
-				},
-			},
-			domain:         "ru",
-			expectedResult: DomainStat{},
-		},
-		{
-			name: "no matches: domain in email",
-			source: users{
-				User{
-					Email: "ru@google.com",
-				},
-			},
-			domain:         "ru",
-			expectedResult: DomainStat{},
-		},
-		{
-			name: "no matches: invalid email: domain is missed",
-			source: users{
-				User{
-					Email: "ru@com",
-				},
-			},
+			name:           "success: qwerty@google.com",
+			source:         "qwerty@google.com",
 			domain:         "com",
-			expectedResult: DomainStat{},
+			expectedResult: "google.com",
 		},
 		{
-			name: "no matches: invalid email: at(@) is missed",
-			source: users{
-				User{
-					Email: "mail.com",
-				},
-			},
+			name:           "success: ololo@google.com",
+			source:         "ololo@google.com",
 			domain:         "com",
-			expectedResult: DomainStat{},
+			expectedResult: "google.com",
+		},
+		{
+			name:           "success: ololo@amazon.com",
+			source:         "ololo@amazon.com",
+			domain:         "com",
+			expectedResult: "amazon.com",
+		},
+		{
+			name:           "success: ololo@aMazOn.com",
+			source:         "ololo@aMazOn.com",
+			domain:         "com",
+			expectedResult: "amazon.com",
+		},
+		{
+			name:           "success: 5Moore.com@Teklist.net",
+			source:         "5Moore.com@Teklist.net",
+			domain:         "com",
+			expectedResult: "",
+		},
+		{
+			name:           "does not contain: missed at(@)",
+			source:         "mail.com",
+			domain:         "com",
+			expectedResult: "",
+		},
+		{
+			name:           "does not contain: domain in email",
+			source:         "ru@google.com",
+			domain:         "ru",
+			expectedResult: "",
 		},
 	}
 
 	for _, tc := range tests {
 		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
-			result, _ := countDomains(tc.source, tc.domain)
+			result := getDomainFromEmail(tc.source, tc.domain)
 			require.Equal(t, tc.expectedResult, result)
 		})
 	}
