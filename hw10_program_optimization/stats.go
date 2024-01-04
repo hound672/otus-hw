@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"io"
-	"regexp"
 	"strings"
 )
 
@@ -42,19 +41,21 @@ func getUsers(r io.Reader) (users, error) {
 
 func countDomains(u users, domain string) (DomainStat, error) {
 	result := make(DomainStat)
-	reg, err := regexp.Compile("\\." + domain)
-	if err != nil {
-		return nil, fmt.Errorf("regexp.Compile: %w", err)
-	}
 
 	for _, user := range u {
-		matched := reg.Match([]byte(user.Email))
-
-		if matched {
-			num := result[strings.ToLower(strings.SplitN(user.Email, "@", 2)[1])]
-			num++
-			result[strings.ToLower(strings.SplitN(user.Email, "@", 2)[1])] = num
+		if !strings.HasSuffix(user.Email, "."+domain) {
+			continue
 		}
+
+		sp := strings.SplitN(user.Email, "@", 2)
+		if len(sp) != 2 {
+			continue
+		}
+
+		dom := strings.ToLower(sp[1])
+		num := result[dom]
+		num++
+		result[dom] = num
 	}
 	return result, nil
 }

@@ -82,3 +82,17 @@ BenchmarkGetDomainStat-16         291168              3978 ns/op            5557
 PASS
 ok      github.com/hound672/otus-hw/hw10_program_optimization   3.827s
 ```
+
+# Remove regexp
+
+```
+go test -v  -tags bench -bench . -benchmem -run BenchmarkGetDomainStat -memprofile=memory.out -cpuprofile cpu.out
+goos: linux
+goarch: amd64
+pkg: github.com/hound672/otus-hw/hw10_program_optimization
+cpu: AMD Ryzen 7 PRO 3700 8-Core Processor
+BenchmarkGetDomainStat
+BenchmarkGetDomainStat-16         802689              1458 ns/op            4159 B/op          2 allocs/op
+PASS
+ok      github.com/hound672/otus-hw/hw10_program_optimization   3.519s
+```

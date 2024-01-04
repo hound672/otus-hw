@@ -1,3 +1,4 @@
+//go:build !bench
 // +build !bench
 
 package hw10programoptimization
@@ -36,4 +37,84 @@ func TestGetDomainStat(t *testing.T) {
 		require.NoError(t, err)
 		require.Equal(t, DomainStat{}, result)
 	})
+}
+
+func Test_countDomains(t *testing.T) {
+	tests := []struct {
+		name           string
+		source         users
+		domain         string
+		expectedResult DomainStat
+	}{
+		{
+			name: "success",
+			source: users{
+				User{
+					Email: "qwerty@google.com",
+				},
+				User{
+					Email: "ololo@google.com",
+				},
+				User{
+					Email: "ololo@amazon.com",
+				},
+				User{
+					Email: "ololo@aMazOn.com",
+				},
+			},
+			domain: "com",
+			expectedResult: DomainStat{
+				"google.com": 2,
+				"amazon.com": 2,
+			},
+		},
+		{
+			name: "no matches",
+			source: users{
+				User{
+					Email: "qwerty@google.com",
+				},
+			},
+			domain:         "ru",
+			expectedResult: DomainStat{},
+		},
+		{
+			name: "no matches: domain in email",
+			source: users{
+				User{
+					Email: "ru@google.com",
+				},
+			},
+			domain:         "ru",
+			expectedResult: DomainStat{},
+		},
+		{
+			name: "no matches: invalid email: domain is missed",
+			source: users{
+				User{
+					Email: "ru@com",
+				},
+			},
+			domain:         "com",
+			expectedResult: DomainStat{},
+		},
+		{
+			name: "no matches: invalid email: at(@) is missed",
+			source: users{
+				User{
+					Email: "mail.com",
+				},
+			},
+			domain:         "com",
+			expectedResult: DomainStat{},
+		},
+	}
+
+	for _, tc := range tests {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			result, _ := countDomains(tc.source, tc.domain)
+			require.Equal(t, tc.expectedResult, result)
+		})
+	}
 }
