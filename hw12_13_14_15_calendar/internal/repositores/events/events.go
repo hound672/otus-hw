@@ -10,6 +10,10 @@ type Events struct {
 	getter *trmpgx.CtxGetter
 }
 
+const (
+	tableName = "events"
+)
+
 func New(db *pgxpool.Pool, c *trmpgx.CtxGetter) *Events {
 	return &Events{
 		db:     db,

@@ -3,6 +3,7 @@ module github.com/hound672/otus-hw/hw12_13_14_15_calendar
 go 1.21
 
 require (
+	github.com/Masterminds/squirrel v1.5.4
 	github.com/avito-tech/go-transaction-manager v1.4.1
 	github.com/brianvoe/gofakeit/v6 v6.26.3
 	github.com/bufbuild/protovalidate-go v0.4.3
@@ -55,6 +56,8 @@ require (
 	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
 	github.com/jackc/puddle/v2 v2.2.1 // indirect
 	github.com/klauspost/compress v1.17.0 // indirect
+	github.com/lann/builder v0.0.0-20180802200727-47ae307949d0 // indirect
+	github.com/lann/ps v0.0.0-20150810152359-62de8c46ede0 // indirect
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/mailru/easyjson v0.0.0-20180823135443-60711f1a8329 // indirect

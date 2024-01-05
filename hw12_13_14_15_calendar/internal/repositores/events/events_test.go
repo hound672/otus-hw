@@ -5,6 +5,7 @@ package events
 import (
 	"context"
 	"testing"
+	"time"
 
 	"github.com/brianvoe/gofakeit/v6"
 	"github.com/stretchr/testify/suite"
@@ -16,6 +17,12 @@ import (
 func newFakeEvent() *entity.Event {
 	event := &entity.Event{}
 	_ = gofakeit.Struct(event)
+	event.UUID = gofakeit.UUID()
+	event.UserUUID = gofakeit.UUID()
+	event.NotifyBefore = gofakeit.UintRange(0, 0xFFFFFFFF)
+	// truncate nsecs
+	event.StartAt = gofakeit.FutureDate().UTC().Truncate(time.Second)
+	event.EndAt = gofakeit.FutureDate().UTC().Truncate(time.Second)
 
 	return event
 }
@@ -43,9 +50,17 @@ func (s *eventSuite) TearDownSuite() {
 }
 
 func (s *eventSuite) SetupTest() {
+	_, err := s.psqlTests.Migration.Up()
+	if err != nil {
+		panic(err)
+	}
 }
 
 func (s *eventSuite) TearDownTest() {
+	_, err := s.psqlTests.Migration.Down()
+	if err != nil {
+		panic(err)
+	}
 }
 
 func TestRunEventSuite(t *testing.T) {

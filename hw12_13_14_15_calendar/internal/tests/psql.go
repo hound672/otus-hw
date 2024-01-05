@@ -13,10 +13,13 @@ import (
 
 	trmpgx "github.com/avito-tech/go-transaction-manager/pgxv5"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/jackc/pgx/v5/stdlib"
 	"github.com/testcontainers/testcontainers-go"
 	postgresTestContainer "github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/testcontainers/testcontainers-go/wait"
 
+	"github.com/hound672/otus-hw/hw12_13_14_15_calendar/migrations"
+	"github.com/hound672/otus-hw/hw12_13_14_15_calendar/pkg/migrate"
 	"github.com/hound672/otus-hw/hw12_13_14_15_calendar/pkg/postgres"
 )
 
@@ -25,6 +28,7 @@ type PsqlTests struct {
 	CtxGetter *trmpgx.CtxGetter
 	Container *postgresTestContainer.PostgresContainer
 	Cleanup   func()
+	Migration *migrate.Migrate
 }
 
 var (
@@ -87,10 +91,17 @@ func getPsql() *PsqlTests {
 		panic(err)
 	}
 
+	conn := stdlib.OpenDBFromPool(pool)
+	migration, err := migrate.New(conn, migrations.Content, "postgres")
+	if err != nil {
+		panic(err)
+	}
+
 	return &PsqlTests{
 		Pool:      pool,
 		Container: postgresContainer,
 		Cleanup:   cleanup,
 		CtxGetter: trmpgx.DefaultCtxGetter,
+		Migration: migration,
 	}
 }

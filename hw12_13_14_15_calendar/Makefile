@@ -50,11 +50,14 @@ show_cover:
 
 .PHONY: lint
 lint: install-lint
-	#golangci-lint run ./...
 	$(LOCAL_BIN)/golangci-lint run
+	
+.PHONY: linter-local
+linter-local: install-lint
+	$(LOCAL_BIN)/golangci-lint run --fix
 
 .PHONY: quality
-quality: linter tests_integration
+quality: linter-local tests_integration
 
 .PHONY: clean_cache
 clean_cache:

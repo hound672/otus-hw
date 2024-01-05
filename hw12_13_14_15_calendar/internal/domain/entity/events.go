@@ -13,7 +13,7 @@ type Event struct {
 	EndAt        time.Time
 	Description  string
 	UserUUID     string
-	NotifyBefore time.Duration
+	NotifyBefore uint
 }
 
 func NewEvent(
@@ -23,7 +23,7 @@ func NewEvent(
 	endAt time.Time,
 	description string,
 	userUUID string,
-	notifyBefore time.Duration,
+	notifyBefore uint,
 ) *Event {
 	return &Event{
 		UUID:         uuid,
