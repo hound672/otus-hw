@@ -4,6 +4,7 @@ go 1.21
 
 require (
 	github.com/avito-tech/go-transaction-manager v1.4.1
+	github.com/brianvoe/gofakeit/v6 v6.26.3
 	github.com/bufbuild/protovalidate-go v0.4.3
 	github.com/go-chi/chi v3.3.4+incompatible
 	github.com/google/wire v0.5.0
@@ -11,6 +12,7 @@ require (
 	github.com/rubenv/sql-migrate v1.6.0
 	github.com/spf13/cobra v1.8.0
 	github.com/spf13/viper v1.18.2
+	github.com/stretchr/testify v1.8.4
 	github.com/utrack/clay/v3 v3.1.0
 	google.golang.org/grpc v1.59.0
 )
@@ -20,6 +22,7 @@ require (
 	github.com/PuerkitoBio/purell v1.1.0 // indirect
 	github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578 // indirect
 	github.com/antlr4-go/antlr/v4 v4.13.0 // indirect
+	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/go-gorp/gorp/v3 v3.1.0 // indirect
 	github.com/go-openapi/jsonpointer v0.17.2 // indirect
@@ -40,6 +43,7 @@ require (
 	github.com/pelletier/go-toml/v2 v2.1.0 // indirect
 	github.com/peterbourgon/mergemap v0.0.0-20130613134717-e21c03b7a721 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
+	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/sagikazarmark/locafero v0.4.0 // indirect
 	github.com/sagikazarmark/slog-shim v0.1.0 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect
