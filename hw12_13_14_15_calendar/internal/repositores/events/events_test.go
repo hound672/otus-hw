@@ -3,13 +3,14 @@
 package events
 
 import (
+	"context"
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v6"
 	"github.com/stretchr/testify/suite"
 
 	"github.com/hound672/otus-hw/hw12_13_14_15_calendar/internal/domain/entity"
-	"github.com/hound672/otus-hw/hw12_13_14_15_calendar/pkg/logger"
+	"github.com/hound672/otus-hw/hw12_13_14_15_calendar/internal/tests"
 )
 
 func newFakeEvent() *entity.Event {
@@ -22,20 +23,29 @@ func newFakeEvent() *entity.Event {
 type eventSuite struct {
 	suite.Suite
 
-	repo *Events
+	psqlTests *tests.PsqlTests
+	repo      *Events
 }
 
 func (s *eventSuite) SetupSuite() {
 	// set up container with postgres
-	logger.Info("SETUP SUITE")
+
+	s.psqlTests = tests.GetPsql()
+	s.repo = New(s.psqlTests.Pool, s.psqlTests.CtxGetter)
+}
+
+func (s *eventSuite) TearDownSuite() {
+	s.psqlTests.Cleanup()
+	err := s.psqlTests.Container.Terminate(context.Background())
+	if err != nil {
+		panic(err)
+	}
 }
 
 func (s *eventSuite) SetupTest() {
-	logger.Info("SETUP TEST")
 }
 
 func (s *eventSuite) TearDownTest() {
-	logger.Info("TEAR DOWN TEST")
 }
 
 func TestRunEventSuite(t *testing.T) {
