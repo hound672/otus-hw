@@ -19,10 +19,11 @@ func newFakeEvent() *entity.Event {
 	_ = gofakeit.Struct(event)
 	event.UUID = gofakeit.UUID()
 	event.UserUUID = gofakeit.UUID()
-	event.NotifyBefore = gofakeit.UintRange(0, 0xFFFFFFFF)
 	// truncate nsecs
 	event.StartAt = gofakeit.FutureDate().UTC().Truncate(time.Second)
 	event.EndAt = gofakeit.FutureDate().UTC().Truncate(time.Second)
+	notifyAt := gofakeit.FutureDate().UTC().Truncate(time.Second)
+	event.NotifyAt = &notifyAt
 
 	return event
 }

@@ -13,7 +13,7 @@ CREATE TABLE events (
     end_at TIMESTAMP NOT NULL,
     description TEXT,
     user_uuid  UUID, -- TODO: add reference after implement users
-    notify_before int
+    notify_at TIMESTAMP
 );
 
 -- +migrate Down

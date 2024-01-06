@@ -10,10 +10,10 @@ type Event struct {
 	// StartAt time of event starting
 	StartAt time.Time
 	// EndAt time of event finished
-	EndAt        time.Time
-	Description  string
-	UserUUID     string
-	NotifyBefore uint
+	EndAt       time.Time
+	Description string
+	UserUUID    string
+	NotifyAt    *time.Time
 }
 
 func NewEvent(
@@ -23,15 +23,15 @@ func NewEvent(
 	endAt time.Time,
 	description string,
 	userUUID string,
-	notifyBefore uint,
+	notifyAt *time.Time,
 ) *Event {
 	return &Event{
-		UUID:         uuid,
-		Title:        title,
-		StartAt:      startAt,
-		EndAt:        endAt,
-		Description:  description,
-		UserUUID:     userUUID,
-		NotifyBefore: notifyBefore,
+		UUID:        uuid,
+		Title:       title,
+		StartAt:     startAt,
+		EndAt:       endAt,
+		Description: description,
+		UserUUID:    userUUID,
+		NotifyAt:    notifyAt,
 	}
 }
