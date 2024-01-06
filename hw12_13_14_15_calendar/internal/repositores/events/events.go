@@ -14,6 +14,8 @@ const (
 	tableName = "events"
 )
 
+var fields = []string{"uuid", "title", "start_at", "end_at", "description", "user_uuid", "notify_at"}
+
 func New(db *pgxpool.Pool, c *trmpgx.CtxGetter) *Events {
 	return &Events{
 		db:     db,

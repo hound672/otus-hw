@@ -9,7 +9,7 @@ import (
 type (
 	Repo interface {
 		Store(ctx context.Context, event *entity.Event) error
-		GetAll(ctx context.Context) ([]*entity.Event, error)
+		ReadAll(ctx context.Context) ([]*entity.Event, error)
 		Delete(ctx context.Context, event *entity.Event) error
 	}
 

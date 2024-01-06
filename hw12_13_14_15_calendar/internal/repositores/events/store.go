@@ -23,7 +23,7 @@ func (r *Events) Store(ctx context.Context, event *entity.Event) error {
 	conn := r.getter.DefaultTrOrDB(ctx, r.db)
 
 	sql, args, err := sq.Insert(tableName).
-		Columns("uuid", "title", "start_at", "end_at", "description", "user_uuid", "notify_at").
+		Columns(fields...).
 		Values(
 			event.UUID, event.Title, event.StartAt, event.EndAt, event.Description, event.UserUUID, event.NotifyAt,
 		).Suffix(onConfictQuery).
