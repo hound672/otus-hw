@@ -1,0 +1,18 @@
+logger:
+  level: ${LOGGER_LEVEL}
+
+server:
+  use_reflection: ${SERVER_USE_REFLECTION}
+  port_grpc: ${SERVER_PORT_GRPC}
+  port_http: ${SERVER_PORT_HTTP}
+  http_read_timeout: ${SERVER_HTTP_READ_TIMEOUT}
+  http_write_timeout: ${SERVER_HTTP_WRITE_TIMEOUT}
+  http_idle_timeout: ${SERVER_HTTP_IDLE_TIMEOUT}
+  http_read_header_timeout: ${SERVER_HTTP_READ_HEADER_TIMEOUT}
+
+postgres:
+  host: ${POSTGRES_HOST}
+  port: ${POSTGRES_PORT}
+  username: ${POSTGRES_USERNAME}
+  password: ${POSTGRES_PASSWORD}
+  database: ${POSTGRES_DATABASE}
